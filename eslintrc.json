@@ -1,0 +1,121 @@
+{
+    "env": {
+      "browser": true,
+      "es2021": true,
+      "node": true
+    },
+    "extends": [
+      "plugin:react/recommended",
+      "airbnb-typescript",
+      "plugin:import/errors",
+      "plugin:import/warnings",
+      "plugin:import/typescript",
+      "plugin:react-hooks/recommended",
+      "plugin:sonarjs/recommended",
+      "prettier"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "project": "./tsconfig.json",
+      "ecmaFeatures": {
+        "jsx": true
+      },
+      "ecmaVersion": 12,
+      "sourceType": "module"
+    },
+    "plugins": ["react", "@typescript-eslint", "sonarjs", "jsx-a11y"],
+    "settings": {
+      "import/extensions": [".js", ".jsx", ".ts", ".tsx"],
+      "import/parsers": {
+        "@typescript-eslint/parser": [".ts", ".tsx"]
+      },
+      "import/resolver": {
+        "typescript": {},
+        "node": {
+          "extensions": [".ts", ".tsx", ".js", ".jsx"]
+        }
+      }
+    },
+    "rules": {
+      "no-param-reassign": [
+        "error",
+        {
+          "props": true,
+          "ignorePropertyModificationsFor": ["state"]
+        }
+      ],
+      "jsx-a11y/label-has-associated-control": [
+        "error",
+        {
+          "required": {
+            "some": ["nesting", "id"]
+          }
+        }
+      ],
+      "jsx-a11y/label-has-for": [
+        "error",
+        {
+          "required": {
+            "some": ["nesting", "id"]
+          }
+        }
+      ],
+      "import/no-unresolved": [
+        "error",
+        {
+          "ignore": ["unity-"]
+        }
+      ],
+      "@typescript-eslint/naming-convention": "off",
+      "@typescript-eslint/dot-notation": "off",
+      "no-unused-vars": "off",
+      "react/jsx-curly-brace-presence": "off",
+      "arrow-body-style": "off",
+      "import/prefer-default-export": "off",
+      "dot-notation": "off",
+      "camelcase": "off",
+      "default-case": "off",
+      "spaced-comment": 0,
+      "operator-linebreak": "off",
+      "no-console": "off",
+      "indent": "off",
+      "import/newline-after-import": "off",
+      "object-curly-spacing": "off",
+      "object-curly-newline": "off",
+      "react/jsx-indent": "off",
+      "semi": "off",
+      "no-use-before-define": "off",
+      "react/jsx-closing-bracket-location": "off",
+      "react/jsx-filename-extension": [
+        2,
+        {
+          "extensions": [".js", ".jsx", ".ts", ".tsx"]
+        }
+      ],
+      "@typescript-eslint/no-use-before-define": "off",
+      "import/extensions": [
+        "error",
+        "ignorePackages",
+        {
+          "js": "never",
+          "jsx": "never",
+          "ts": "never",
+          "tsx": "never"
+        }
+      ],
+      "no-underscore-dangle": "off",
+      "import/no-extraneous-dependencies": [
+        "error",
+        {
+          "devDependencies": true
+        }
+      ],
+      "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "off",
+      "@typescript-eslint/default-param-last": "off",
+      "import/no-cycle": "error"
+    },
+    "ignorePatterns": [
+      "src/index.tsx"
+    ]
+  }
