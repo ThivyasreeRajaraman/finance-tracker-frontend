@@ -1,0 +1,17 @@
+.chart-title {
+    margin-left:-50px;
+}
+
+.chart-group:hover {
+    opacity: 0.9;
+    cursor:pointer !important;
+}
+
+.legend-group {
+    font-size: 13px;
+}
+
+.legend-group .legend-item:hover {
+    font-size: 16px; 
+    cursor: pointer;
+}
