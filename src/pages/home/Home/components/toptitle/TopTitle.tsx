@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import './style.css';
 import UserProfile from '../userprofile/UserProfile';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilValue, useRecoilState, useRecoilValueLoadable } from 'recoil';
+import { useRecoilValue, useRecoilState, useRecoilValueLoadable, useSetRecoilState } from 'recoil';
 import { isUserLoggedIn } from 'pages/login/Login/store/LoginSelector';
 import { Row, Col, Modal, Button, Spin, Badge } from 'antd';
 import LoadingIndicator from 'pages/generic/components/Loader/Loader';
@@ -21,6 +21,7 @@ const TopTitle = () => {
   const [modalVisible, setModalVisible] = useRecoilState(modalVisibleState);
   const [reminders, setReminders] = useState<ReminderMessageType[]>([]);
   const remindersDataLoadable = useRecoilValueLoadable(remindersDataSelector);
+  // const setRemindersData = useSetRecoilState(remindersDataSelector);
   const { loading: notificationLoading, error: notificationError, data: notification } = getLoadableStateAndContents(remindersDataLoadable);
 
   useEffect(() => {

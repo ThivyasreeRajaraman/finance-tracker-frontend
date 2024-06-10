@@ -18,7 +18,7 @@ const Home = () => {
   }
 
   if (transactionTotalLoadable.state === 'hasValue' && reminderLoadable.state === 'hasValue') {
-    console.log("valllll:",reminderLoadable.contents, reminderLoadable)
+    // console.log("valllll:",reminderLoadable.contents, reminderLoadable)
     const transactionTotal = transactionTotalLoadable.contents;
 
     return (
