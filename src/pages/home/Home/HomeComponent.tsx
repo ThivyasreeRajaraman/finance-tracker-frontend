@@ -1,9 +1,10 @@
-import React from 'react';
+import { useState,Suspense } from 'react';
 import TopTitle from './components/toptitle/TopTitle';
 import Sidebar from './components/sidebar/SideBar';
 import './style.css';
 import { Row, Col } from 'antd';
 import CustomCard from 'pages/generic/components/Card/Card';
+import CurrencyPopup from './components/currencyPopup/CurrencyPopup';
 import { useRecoilValue, useRecoilValueLoadable } from 'recoil';
 import { transactionTotalSelector } from './store/HomeSelectors';
 import { formatCurrency } from 'pages/generic/helpers/FormatHelpers';
@@ -15,6 +16,11 @@ import { TransformedData, TransformedDataForCategory } from './store/HomeTypes';
 const Home = () => {
   const transactionTotalLoadable = useRecoilValueLoadable(transactionTotalSelector);
   const reminderLoadable = useRecoilValueLoadable(remindersDataSelector);
+  const [, setSelectedCurrency] = useState<string | null>(null);
+
+  const handleCurrencyChange = (currency: string) => {
+    setSelectedCurrency(currency);
+  };
   const categoryWiseTotalLoadable = useRecoilValueLoadable(categoryWiseTotalSelector);
 
   if (transactionTotalLoadable.state === 'loading' && reminderLoadable.state === 'loading' && categoryWiseTotalLoadable.state === 'loading') {
@@ -37,6 +43,7 @@ const Home = () => {
 
     return (
       <>
+      {/* <CurrencyPopup onCurrencyChange={handleCurrencyChange}/> */}
         <Row className="main-title">Finance Tracker</Row>
         <Row className='chart-row'>
           <Col className='chart-column'>

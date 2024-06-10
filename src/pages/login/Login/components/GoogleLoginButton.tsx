@@ -34,7 +34,8 @@ const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({ onSuccess, onFail
           user_id: decodedToken.user_id,
           name: user.name,
           email: decodedToken.email,
-          isLoggedIn: true
+          isLoggedIn: true,
+          currency:user.default_currency
         };
         setUser(userData)
 

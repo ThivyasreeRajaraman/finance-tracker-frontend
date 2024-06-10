@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
 import './style.css';
-import UserProfile from '../userprofile/UserProfile';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue, useRecoilState, useRecoilValueLoadable, useSetRecoilState } from 'recoil';
 import { isUserLoggedIn } from 'pages/login/Login/store/LoginSelector';
@@ -13,6 +12,7 @@ import { modalVisibleState } from '../../store/HomeAtoms';
 import apiClient from 'pages/generic/apiUtils/client';
 import { HandleErrorResponse } from 'pages/generic/apiUtils/apiErrorHandling';
 import { message } from 'antd';
+import UserProfile from '../userProfile/UserProfile';
 
 const TopTitle = () => {
   const navigate = useNavigate();

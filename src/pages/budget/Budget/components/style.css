@@ -1,0 +1,36 @@
+#budgetForm {
+    margin-left: 80px;
+    margin-top:20px;
+}
+
+div.ant-table-wrapper.css-dev-only-do-not-override-3rel02 {
+    margin-left: 38px !important;
+    margin-right: -10px;
+    background-color: #f6f6f6;
+    padding:35px;
+}
+
+
+.ant-select-selector {
+    width: 200px;
+}
+
+.ant-picker-input > input {
+    width: 200px; 
+}
+
+.ant-picker-cell-inner {
+    width: 36px; 
+}
+
+.ant-form-item-control-input {
+    width:400px !important;
+    height:38px !important;
+}
+label {
+    font-size: 15px !important;
+    line-height: 3;
+}
+#budgetForm .css-dev-only-do-not-override-3rel02 .ant-picker-panel {
+    width: 400px !important; 
+}

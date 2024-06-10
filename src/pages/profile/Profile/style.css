@@ -1,0 +1,10 @@
+/* style.css */
+
+.edit-profile-modal {
+    margin-left: 600px;
+}
+
+.ant-spin-container {
+    display: block;
+    position:relative;
+}
