@@ -20,7 +20,7 @@ const PieChart = ({ data, title }: PieChartProps) => {
     svg.selectAll('*').remove();
 
     const width = 350;
-    const height = 450;
+    const height = 420;
     const margin = 40;
     const radius = Math.min(width, height - 100) / 2 - margin;
     const innerRadius = radius * 0.5;
@@ -51,6 +51,7 @@ const PieChart = ({ data, title }: PieChartProps) => {
     chart.append('text')
       .attr('text-anchor', 'middle')
       .attr('dominant-baseline', 'middle')
+      .attr('font-size', '20px')
       .text(totalAmount);
 
     const legend = svg.append('g')
