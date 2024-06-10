@@ -21,6 +21,7 @@ export type currentUserType = {
     user_id: number;
     name: string;
     email: string;
-    isLoggedIn: boolean
+    isLoggedIn: boolean;
+    currency:string
 }
 

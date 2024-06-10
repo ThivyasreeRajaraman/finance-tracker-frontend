@@ -1,7 +1,6 @@
 import ProfileList from './components/profileList';
 import { useNavigate } from 'react-router-dom';
 import Header from 'pages/generic/header/header';
-import Home from 'pages/home/Home/HomeComponent';
 import { Suspense } from "react";
 import { Spin } from 'antd';
 const ProfilePage =()=>{

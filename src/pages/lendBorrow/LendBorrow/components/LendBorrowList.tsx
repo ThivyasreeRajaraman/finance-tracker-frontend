@@ -2,8 +2,8 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { useRecoilState, useRecoilValueLoadable, useSetRecoilState } from 'recoil';
 import { Table, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import { getLendBorrow } from '../store/LendBorrowSelectors';
-import { LendBorrowFiltersAtom,LendBorrowAtom } from '../store/LendBorrowAtoms';
+import { getLendBorrow,createOrUpdateLendBorrow } from '../store/LendBorrowSelectors';
+import { LendBorrowFiltersAtom,LendBorrowAtom,CreateLendBorrowPayloadAtom } from '../store/LendBorrowAtoms';
 import columns from './LendBorrowColumns';
 import { LendBorrow } from '../store/LendBorrowTypes';
 import apiClient from 'pages/generic/apiUtils/client';
@@ -17,24 +17,26 @@ interface LendBorrowListProps {
 
 const LendBorrowList: React.FC<LendBorrowListProps> = ({ onEdit, onDelete }) => {
    
-    var setLendBorrowPayload = useSetRecoilState(LendBorrowAtom)
+    const [lendBorrow, setLendBorrow] = useRecoilState(LendBorrowAtom);
     const navigate = useNavigate();
     const [lendBorrowData, setLendBorrowData] = useRecoilState(LendBorrowFiltersAtom);
+    const createOrUpdateLendBorrowLoadable = useRecoilValueLoadable(createOrUpdateLendBorrow);
+    const [lendBorrowPayload, setLendBorrowPayload] = useRecoilState(CreateLendBorrowPayloadAtom);
     const [currPage, setCurrPage] = useState(1);
 
-    useEffect(() => {
-        setLendBorrowPayload(null);
-    }, [])
+    
+
     console.log("step1")
     const loadable = useRecoilValueLoadable(getLendBorrow);
     const { data, page, limit, totalCount } = loadable.contents;
 
     useEffect(() => {
+        console.log("loadable::")
         if (loadable.state === 'hasValue') {
-            console.log("dataaa:",data)
-            setLendBorrowPayload(data);
+            setLendBorrow(data);
         }
-    }, [loadable, setLendBorrowPayload, data]);
+    }, [loadable, data, lendBorrowData, lendBorrowPayload,setLendBorrow, setLendBorrowPayload, createOrUpdateLendBorrowLoadable, CreateLendBorrowPayloadAtom]);
+
 
     
 

@@ -29,9 +29,7 @@ const Home = () => {
 
     return (
       <>
-      <CurrencyPopup
-                  onCurrencyChange={handleCurrencyChange}
-                />
+      {/* <CurrencyPopup onCurrencyChange={handleCurrencyChange}/> */}
         <Row className="main-title">Finance Tracker</Row>
         <Row gutter={[16, 16]}>
           <Col span={8}>

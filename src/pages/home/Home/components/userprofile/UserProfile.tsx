@@ -17,13 +17,18 @@ const UserProfile = () => {
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('userName');
+    localStorage.removeItem('currency');
     resetUserData();
     navigate('/');
   };
 
+  const handleProfileClick = () => {
+    navigate('/profile');
+  };
+
   const menu = (
     <Menu className="menu">
-      <Menu.Item key="1">Profile</Menu.Item>
+      <Menu.Item key="1" onClick={handleProfileClick}>Profile</Menu.Item>
       <Menu.Divider />
       <Menu.Item key="2" onClick={handleLogout}>Logout</Menu.Item>
     </Menu>
