@@ -14,3 +14,21 @@ export type ReminderMessageType = {
 export type RemindersData = {
   Reminder: ReminderMessageType[];
 };
+
+export type TransactionTotalResponse = {
+  borrow: number;
+  budget: number;
+  expense: number;
+  income: number;
+  lend: number;
+}
+
+export type TransformedData = {
+  transaction_type: string;
+  amount: number;
+}
+
+export type TransformedDataForCategory = {
+  category: string;
+  amount: number;
+}

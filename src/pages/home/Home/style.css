@@ -29,7 +29,33 @@
 
 .main-title {
     padding-top: 30px;
-    padding-left: 450px;
+    padding-left: 40px;
     font-weight: 700;
     font-size: 36px;
+    margin-bottom: 100px;
+}
+
+.chart-title {
+    text-align: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.chart-row {
+    margin-top:40px;
+}
+
+.chart-row {
+    margin-left:180px;
+    /* margin-bottom:200px;  */
+    height:auto;
+    overflow: auto;
+}
+
+.chart-column {
+    margin-right:100px;
+}
+
+.pie-chart {
+    margin-top:10px;
 }

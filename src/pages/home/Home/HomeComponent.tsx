@@ -7,40 +7,55 @@ import CustomCard from 'pages/generic/components/Card/Card';
 import { useRecoilValue, useRecoilValueLoadable } from 'recoil';
 import { transactionTotalSelector } from './store/HomeSelectors';
 import { formatCurrency } from 'pages/generic/helpers/FormatHelpers';
-import { remindersDataSelector } from './store/HomeSelectors';
+import { remindersDataSelector, categoryWiseTotalSelector } from './store/HomeSelectors';
+import PieChart from 'pages/generic/components/Charts/PieChart';
+import { transformData, transformDataForTransactions } from 'pages/generic/helpers/FormatHelpers';
+import { TransformedData, TransformedDataForCategory } from './store/HomeTypes';
 
 const Home = () => {
   const transactionTotalLoadable = useRecoilValueLoadable(transactionTotalSelector);
   const reminderLoadable = useRecoilValueLoadable(remindersDataSelector);
+  const categoryWiseTotalLoadable = useRecoilValueLoadable(categoryWiseTotalSelector);
 
-  if (transactionTotalLoadable.state === 'loading' && reminderLoadable.state === 'loading') {
+  if (transactionTotalLoadable.state === 'loading' && reminderLoadable.state === 'loading' && categoryWiseTotalLoadable.state === 'loading') {
     return <div>Loading...</div>;
   }
 
-  if (transactionTotalLoadable.state === 'hasValue' && reminderLoadable.state === 'hasValue') {
-    // console.log("valllll:",reminderLoadable.contents, reminderLoadable)
+  if (transactionTotalLoadable.state === 'hasValue' && reminderLoadable.state === 'hasValue' && categoryWiseTotalLoadable.state === 'hasValue') {
+
     const transactionTotal = transactionTotalLoadable.contents;
+    const transformedData = transformData(transactionTotal);
+    const categoryWiseTransactionTotal = categoryWiseTotalLoadable.contents;
+    console.log("data in home::", categoryWiseTransactionTotal)
+
+    const budgetData = categoryWiseTransactionTotal.budget;
+    const transformedBudgetData = transformDataForTransactions(budgetData);
+    const expenseData = categoryWiseTransactionTotal.expense;
+    const transformedExpenseData = transformDataForTransactions(expenseData);
+    const incomeData = categoryWiseTransactionTotal.income;
+    const transformedIncomeData = transformDataForTransactions(incomeData);
 
     return (
       <>
         <Row className="main-title">Finance Tracker</Row>
-        <Row gutter={[16, 16]}>
-          <Col span={8}>
-            <CustomCard title="Income" content={formatCurrency(transactionTotal.income)} titleColor="#1890ff" />
+        <Row className='chart-row'>
+          <Col className='chart-column'>
+            <Row className='pie-chart'><PieChart title="Summary of transactions" data={transformedData} /></Row>
           </Col>
-          <Col span={8}>
-            <CustomCard title="Expense" content={formatCurrency(transactionTotal.expense)} titleColor="#f5222d"/>
-          </Col>
-          <Col span={8}>
-            <CustomCard title="Budget" content={formatCurrency(transactionTotal.budget)} titleColor="#52c41a"/>
-          </Col>
-          <Col span={12}>
-            <CustomCard title="Lent" content={formatCurrency(transactionTotal.lend)} titleColor="#faad14"/>
-          </Col>
-          <Col span={12}>
-            <CustomCard title="Borrowed" content={formatCurrency(transactionTotal.borrow)} titleColor="#722ed1" />
+          <Col className='chart-column'>
+            <Row className='pie-chart'><PieChart title='Income'  data={transformedIncomeData} /></Row>
           </Col>
         </Row>
+        <Row className='chart-row'>
+          <Col className='chart-column'>
+            <Row className='pie-chart'><PieChart title='Budget' data={transformedBudgetData} /></Row>
+          </Col>
+          <Col className='chart-column'>
+            <Row className='pie-chart'><PieChart title='Expense' data={transformedExpenseData} /></Row>
+          </Col>
+        </Row>
+
+
       </>
     );
   }

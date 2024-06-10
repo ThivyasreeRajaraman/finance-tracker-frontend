@@ -32,14 +32,14 @@ const TopTitle = () => {
 
   useEffect(() => {
     if (remindersDataLoadable.state === 'hasValue') {
-      const data = notification as RemindersData;
+      const data = remindersDataLoadable.contents as RemindersData;
       if (data && data.Reminder) {
         setReminders(data.Reminder);
       } else {
         setReminders([]);
       }
     }
-  }, [notification, remindersDataLoadable]);
+  }, [notification, remindersDataLoadable, setModalVisible]);
 
   const handleTitleClick = () => {
     navigate('/homepage');
@@ -51,6 +51,11 @@ const TopTitle = () => {
 
   const handleModalClose = () => {
     setModalVisible(false);
+  };
+
+  const updateRemindersState = (id: number) => {
+    setReminders((prevReminders) => prevReminders.filter(reminder => reminder.id !== id));
+    handleModalClose();
   };
 
   const renderReminders = () => {
@@ -69,6 +74,7 @@ const TopTitle = () => {
     try {
       const token = localStorage.getItem('token');
       await apiClient(token).put(`api/user/recurringExpense/${id}/updateNextExpenseDate`);
+      updateRemindersState(id);
       handleModalClose();
       message.success('Next expense date is updated successfully');
     } catch (error) {
@@ -81,6 +87,7 @@ const TopTitle = () => {
     try {
       const token = localStorage.getItem('token');
       await apiClient(token).put(`api/user/recurringExpense/${id}`, { active: false });
+      updateRemindersState(id);
       handleModalClose();
       message.success('Recurring expense deactivated successfully');
     } catch (error) {

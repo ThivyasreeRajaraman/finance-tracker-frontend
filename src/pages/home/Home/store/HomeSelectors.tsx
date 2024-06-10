@@ -25,9 +25,7 @@ export const remindersDataSelector = selector({
     get: async ({ get }) => {
         try {
             const token = localStorage.getItem('token');
-            console.log("visible")
             const response = await apiClient(token).get('api/user/recurringExpense/reminder');
-            console.log("resss:", response)
             return response.data;
         } catch (error) {
             console.error('Error fetching reminders data:', error);
@@ -36,3 +34,19 @@ export const remindersDataSelector = selector({
         }
     },
 });
+
+export const categoryWiseTotalSelector = selector({
+    key: 'categoryWiseTotal',
+    get: async ({ get }) => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await apiClient(token).get('api/user/categoryWiseTotal');
+        console.log("transactionCategWise::",response.data)
+        return response.data.transaction_total_by_category 
+      } catch (error) {
+        console.error('Error fetching category-wise total data:', error);
+        HandleErrorResponse(error);
+        return {};
+      }
+    },
+  });

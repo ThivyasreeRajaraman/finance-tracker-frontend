@@ -40,7 +40,7 @@ export const createOrUpdateIncomeOrExpense = selector({
                 const token = localStorage.getItem('token');
                 let response
                 console.log("recPayload::", incomeOrExpensePayload)
-                if (incomeOrExpensePayload.category_name != '') {
+                if (incomeOrExpensePayload.category_name !== '') {
                     if (transactionId) {
                         response = await apiClient(token).put<DataResponseForExistingEntry>(`api/user/transaction/${transactionId}`, incomeOrExpensePayload);
                         console.log("Response data1:", response.data);
@@ -98,8 +98,6 @@ export const getIncomeOrExpenses = selector<{
             amount: item.amount,
             nextExpenseDate: item.next_expense_date,
         }));
-        console.log("data::", selectedData)
-        console.log("data::", response.data)
         return {
             data: selectedData,
             page: response.data.page,
