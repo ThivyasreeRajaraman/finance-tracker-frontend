@@ -12,7 +12,7 @@ import { modalVisibleState } from '../../store/HomeAtoms';
 import apiClient from 'pages/generic/apiUtils/client';
 import { HandleErrorResponse } from 'pages/generic/apiUtils/apiErrorHandling';
 import { message } from 'antd';
-import UserProfile from '../userProfile/UserProfile';
+import UserProfile from '../userprofile/UserProfile';
 
 const TopTitle = () => {
   const navigate = useNavigate();
