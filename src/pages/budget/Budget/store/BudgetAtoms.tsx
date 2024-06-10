@@ -7,7 +7,7 @@ export interface BudgetFilters {
 }
 
 export const formState = atom<CreateBudgetFormType>({
-  key: 'formState',
+  key: 'budgetFormState',
   default: {
     budgets: [
       {
@@ -38,7 +38,7 @@ export const budgetIdState = atom<string | null>({
 });
 
 export const CreateBudgetPayloadAtom = atom<CreateBudgetPayloadType>({
-  key: 'recurringExpensesPayload',
+  key: 'budgetPayload',
   default: {
     budgets: [
       {
