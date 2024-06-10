@@ -1,0 +1,62 @@
+.login-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .app-name-container {
+    background-color: #37b4af;
+    width: 400px;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+  }
+  
+  .app-name {
+    color: white !important;
+  }
+  
+  .login-card-container {
+    width: 400px;
+    height: 150px;
+    margin-top: 20px;
+    background-color: #f6f6f6 !important;
+  }
+  
+  .login-card {
+    border-radius: 6px;
+  }
+  
+  .login-card .ant-card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .login-card .ant-card-body .login-title {
+    font-size: 20px;
+    margin-bottom: 17px;
+  }
+  
+  .login-card .ant-card-body .login-button {
+    border-radius: 6px;
+    border: 2px solid;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .login-card .ant-card-body .login-button .google-icon {
+    margin-right: 10px;
+  }
+  
+  .login-title {
+    font-weight: 600;
+    font-size: 20px;
+    margin-top: 20px;
+  }
