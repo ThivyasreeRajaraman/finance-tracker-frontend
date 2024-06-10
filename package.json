@@ -10,6 +10,7 @@
     "@testing-library/user-event": "^13.2.1",
     "antd": "^5.18.0",
     "axios": "^1.7.2",
+    "d3": "^7.9.0",
     "eslint": "^9.4.0",
     "expo-font": "10.0.5",
     "expo-modules-core": "0.6.5",
@@ -59,6 +60,7 @@
   },
   "devDependencies": {
     "@types/antd": "^1.0.0",
+    "@types/d3": "^7.4.3",
     "@types/luxon": "^3.4.2",
     "eslint-config-react-app": "^7.0.1"
   }
