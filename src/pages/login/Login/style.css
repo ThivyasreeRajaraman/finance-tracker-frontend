@@ -24,7 +24,9 @@
     width: 400px;
     height: 150px;
     margin-top: 20px;
-    background-color: #f6f6f6 !important;
+  }
+  .ant-card .login-card .css-dev-only-do-not-override-3rel02 {
+    background-color: black !important;
   }
   
   .login-card {

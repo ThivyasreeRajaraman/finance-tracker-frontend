@@ -1,9 +1,9 @@
-// RecurringExpenseRoutes.js
-import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import RecurringExpenseListPage from '../RecurringExpense/RecurringExpenseList';
-import CreateRecurringExpensePage from '../RecurringExpense/CreateExpense';
+import CreateRecurringExpensePage from '../RecurringExpense/CreateRecurringExpense';
 import EditRecurringExpensePage from '../RecurringExpense/EditRecurringExpense';
+import Home from 'pages/home/Home/HomeComponent';
+import { Outlet } from 'react-router-dom';
 function RecurringExpenseRoutes() {
   return (
     <Routes>

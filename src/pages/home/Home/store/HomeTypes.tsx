@@ -1,6 +1,16 @@
-import React from 'react';
+export type TransactionTotalType = {
+  income: number,
+  expense: number,
+  lend: number,
+  borrow: number,
+  budget: number
+};
 
-export interface MenuItem {
-  title: string;
-  icon: React.ReactNode | null;
-}
+export type ReminderMessageType = {
+  reminders: string;
+  id: number;
+};
+
+export type RemindersData = {
+  Reminder: ReminderMessageType[];
+};

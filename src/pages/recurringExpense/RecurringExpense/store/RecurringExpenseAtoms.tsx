@@ -1,5 +1,5 @@
 import { atom } from 'recoil';
-import { CreateRecurringExpenseFormType,CreateRecurringExpensePayloadType } from './RecurringExpenseTypes';
+import { CreateRecurringExpenseFormType, CreateRecurringExpensePayloadType, RecurringExpense, CategoriesResponse } from './RecurringExpenseTypes';
 
 export interface RecurringExpenseFilters {
   page: string;
@@ -11,10 +11,11 @@ export interface RecurringExpenseFilters {
 export const formState = atom<CreateRecurringExpenseFormType>({
   key: 'formState',
   default: {
-    category_name: '',
+    category_name: undefined,
     amount: null,
-    frequency: '',
+    frequency: undefined,
     next_expense_date: null,
+    currency:'INR'
   }
 });
 
@@ -26,9 +27,9 @@ export const RecurringExpenseFiltersAtom = atom<RecurringExpenseFilters>({
   },
 });
 
-export const RecurringExpensesAtom = atom<null>({
+export const RecurringExpensesAtom = atom<RecurringExpense[]>({
     key: 'recurringExpenses',
-    default: null,
+    default: [],
 });
 
 export const expenseIdState = atom<string | null>({
@@ -42,6 +43,7 @@ export const CreateRecurringExpensePayloadAtom = atom<CreateRecurringExpensePayl
     category_name: '',
     amount: null,
     frequency: '',
-    next_expense_date: ''
+    next_expense_date: '',
+    currency:'INR',
   }
 });

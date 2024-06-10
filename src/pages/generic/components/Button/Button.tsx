@@ -9,7 +9,7 @@ interface GenericButtonProps {
 const GenericButton = ({ text }:GenericButtonProps) => {
    
     return (
-        <Button type="primary" htmlType="submit" className={`${text === 'Reset' ? 'reset-button' : 'generic-button'}`}>
+        <Button type="primary" htmlType="submit" className='generic-button'>
             {text}
         </Button>
     );

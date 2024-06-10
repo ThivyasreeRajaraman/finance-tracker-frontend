@@ -27,7 +27,7 @@ const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({ onSuccess, onFail
         const name = user.name;
         localStorage.setItem('token', token);
         localStorage.setItem('userName', name);
-        localStorage.setItem('currency',user.default_currency)
+        localStorage.setItem('currency', user.default_currency);
 
         const decodedToken: any = jwtDecode(token);
         const userData: currentUserType = {

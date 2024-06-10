@@ -2,8 +2,8 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { useRecoilState, useRecoilValueLoadable, useSetRecoilState } from 'recoil';
 import { Table, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import { getRecurringExpenses } from '../store/RecurringExpenseSelectors';
-import { RecurringExpenseFiltersAtom, RecurringExpensesAtom } from '../store/RecurringExpenseAtoms';
+import { getRecurringExpenses, createOrUpdateRecurringExpense } from '../store/RecurringExpenseSelectors';
+import { RecurringExpenseFiltersAtom, RecurringExpensesAtom, CreateRecurringExpensePayloadAtom } from '../store/RecurringExpenseAtoms';
 import columns from './RecurringExpenseColumns';
 import { RecurringExpense } from '../store/RecurringExpenseTypes';
 import apiClient from 'pages/generic/apiUtils/client';
@@ -13,30 +13,29 @@ import './style.css';
 interface RecurringExpenseListProps {
     onEdit?: (expense: RecurringExpense) => void;
     onDelete?: (expense: RecurringExpense) => void;
+    onActivate?: (expense: RecurringExpense) => void;
 }
 
-const RecurringExpenseList: React.FC<RecurringExpenseListProps> = ({ onEdit, onDelete }) => {
-   
-    var setRecurringExpensePayload = useSetRecoilState(RecurringExpensesAtom)
+const RecurringExpenseList = ({ onEdit, onDelete, onActivate }: RecurringExpenseListProps) => {
+
+    const [recurringExpenses, setRecurringExpenses] = useRecoilState(RecurringExpensesAtom);
     const navigate = useNavigate();
     const [recurringExpensesData, setRecurringExpensesData] = useRecoilState(RecurringExpenseFiltersAtom);
+    const [recurringExpensePayload, setRecurringExpensePayload] = useRecoilState(CreateRecurringExpensePayloadAtom);
+    const createOrUpdateRecurringExpenseLoadable = useRecoilValueLoadable(createOrUpdateRecurringExpense);
     const [currPage, setCurrPage] = useState(1);
 
-    useEffect(() => {
-        setRecurringExpensePayload(null);
-    }, [])
-    
+
     const loadable = useRecoilValueLoadable(getRecurringExpenses);
     const { data, page, limit, totalCount } = loadable.contents;
+    console.log("data:", data)
 
     useEffect(() => {
+        console.log("loadable::")
         if (loadable.state === 'hasValue') {
-            console.log("dataaa:",data)
-            setRecurringExpensePayload(data);
+            setRecurringExpenses(data);
         }
-    }, [loadable, setRecurringExpensePayload, data]);
-
-    
+    }, [loadable, data, recurringExpensesData, recurringExpensePayload, setRecurringExpenses, setRecurringExpensePayload, createOrUpdateRecurringExpenseLoadable, CreateRecurringExpensePayloadAtom]);
 
     const handlePageChange = useCallback((page: number) => {
         setCurrPage(page);
@@ -44,30 +43,64 @@ const RecurringExpenseList: React.FC<RecurringExpenseListProps> = ({ onEdit, onD
             ...prevState,
             page: page.toString(),
         }));
-    }, [setRecurringExpensesData]);
+    }, [setRecurringExpensesData, setRecurringExpenses]);
 
     const handleEdit = (record: RecurringExpense) => {
-        console.log("rec::",record)
+        console.log("rec::", record)
         navigate(`/recurringExpense/${record.id}/edit`);
     };
 
     const handleDelete = async (record: RecurringExpense) => {
         try {
             const token = localStorage.getItem('token');
-            await await apiClient(token).delete<DataResponseType>(`api/user/recurringExpense/${record.id}`); 
+            await await apiClient(token).delete<DataResponseType>(`api/user/recurringExpense/${record.id}`);
             message.success('Recurring expense deleted successfully');
-            onDelete?.(record); // Trigger the onDelete callback to update the UI
+            onDelete?.(record);
+            setRecurringExpenses((prevData) => prevData.filter((expense) => expense.id !== record.id));
+            setRecurringExpensesData((prevState) => ({
+                ...prevState,
+                page: '1',
+            }));
+            
         } catch (error) {
             console.error('Error deleting recurring expense:', error);
             message.error('Failed to delete recurring expense');
         }
     };
-    
+
+    const handleActivate = async (record: RecurringExpense) => {
+        try {
+            const token = localStorage.getItem('token');
+            await await apiClient(token).put<DataResponseType>(`api/user/recurringExpense/${record.id}`, { active: true });
+            message.success('Recurring expense activated successfully');
+            onActivate?.(record);
+            setRecurringExpenses(prevData =>
+                // prevData.map(expense =>
+                //     expense.id === record.id ? { ...expense, active: true } : expense
+                // )
+                prevData.map((expense) => {
+                    if (expense.id === record.id) {
+                      return { ...expense, active: true };
+                    }
+                    console.log("expppp",expense)
+                    return expense;
+                  })
+            );
+            setRecurringExpensesData((prevState) => ({
+                ...prevState,
+                page: '1',
+            }));
+        } catch (error) {
+            console.error('Error activating recurring expense:', error);
+            message.error('Failed to activate recurring expense');
+        }
+    };
+
 
     return (
         <>
             <Table
-                columns={columns(handleEdit, handleDelete)}
+                columns={columns(handleEdit, handleDelete, handleActivate)}
                 dataSource={data}
                 pagination={{
                     current: currPage,

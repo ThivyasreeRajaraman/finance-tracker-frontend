@@ -1,14 +1,12 @@
 import { Moment } from "moment";
-
-export type CreateRecurringExpenseProps = {
-    expenseId?: string;
-}
+import { DataResponseType } from "pages/generic/apiUtils/apiTypes";
 
 export type CreateRecurringExpenseFormType = {
-    category_name: string;
+    category_name?: string;
     amount: number | null;
-    frequency: string;
+    frequency?: string;
     next_expense_date: null | Moment;
+    currency: string;
 };
 
 export type CreateRecurringExpensePayloadType = {
@@ -16,7 +14,9 @@ export type CreateRecurringExpensePayloadType = {
     amount: number | null;
     frequency?: string;
     next_expense_date: string | undefined;
+    currency: string;
 };
+
 
 export interface RecurringExpense {
     id: number;
@@ -28,5 +28,16 @@ export interface RecurringExpense {
     nextExpenseDate: string;
     createdAt: string;
     updatedAt: string;
+    active: boolean;
+    currency: string;
+  }
+
+  export interface CategoriesResponse extends DataResponseType {
+    data: string[];
   }
   
+  export const defaultCategoriesResponse: CategoriesResponse = {
+    success: false,
+    message: "",
+    data: [],
+  };

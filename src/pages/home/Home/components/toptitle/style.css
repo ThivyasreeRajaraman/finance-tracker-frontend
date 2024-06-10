@@ -1,34 +1,81 @@
 .top-title {
-    position: fixed;
-    padding-left: 16px;
-    background-color: #37b4af;
+    background-color: white;
     display: flex;
-    justify-content: space-between;
     align-items: center;
     width: 100%;
-    height: 70px;
+    height: 72px !important;
     font-size: 18px;
-    border: none !important; /* Ensure no border is applied */
+    border: none !important; 
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-}
+    position: fixed;
+    z-index: 1;
+  }
+  
+  .top-title img {
+    height: 130px; 
+    padding-left: 25px;
+    margin-top: 0; 
 
-.top-title h2 {
-    color: #ffffff;
-    margin: 0;
-    width: 233px;
-}
+  }
+  
 
-.remaining-content {
-    flex-grow: 1;
-    height:70px;
-    background-color: white !important;
-    border: none !important; /* Ensure no border is applied */
-}
-
-.user-profile {
-    margin-right: 16px;
-}
-
-.app-name {
+  .shopup-logo-container {
+    height: 100%; 
+    width: 200px !important;
+    background-color: #37b4af;
+    display: flex;
+    align-items: center; 
+    padding-top:-16px;
     cursor: pointer;
-}
+  }
+  
+  .notification {
+    width:20px !important;
+    height:20px !important;
+    margin-top:5px !important;
+  }
+
+  .notification:hover {
+    cursor:pointer;
+    width:22px !important;
+    height:22px !important;
+  }
+
+  .top-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .actions {
+    display: flex;
+    align-items: center;
+  }
+
+  .notification-model {
+    background: black;
+  }
+
+  .continue-button {
+    color: white;
+    background: #37b4af;
+    margin-right:10px;
+    width:109px;
+  }
+
+  .deactivate-button {
+    background: #d74242;
+    color:white;
+  }
+
+  button:hover {
+    border-color:#37b4af !important;
+    color:#37b4af !important;
+  }
+
+  .snooze-button {
+    color: white;
+    background: #37b4af;
+    margin-right:10px;
+    width:109px;
+  }

@@ -3,7 +3,7 @@ export const formatDate = (dateString: string): string => {
     const day = date.getDate();
     const month = date.toLocaleString('default', { month: 'short' });
     const year = date.getFullYear();
-    const suffix = getDaySuffix(day); // Function to get day suffix, e.g., 'st', 'nd', 'rd', 'th'
+    const suffix = getDaySuffix(day);
 
     return `${day}${suffix} ${month} ${year}`;
 };
@@ -26,10 +26,14 @@ const getDaySuffix = (day: number): string => {
 
 export const formatCurrency = (amount: number): string => {
     const currency = localStorage.getItem('currency') ?? 'INR';
-
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: currency,
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
     }).format(amount);
 };
   
+export const capitalizeFirstLetter = (string: string): string => {
+    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+};

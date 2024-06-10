@@ -1,28 +1,26 @@
-import React from 'react';
-import './style.css';
 import { Link } from 'react-router-dom';
+import { Menu } from 'antd';
+import './style.css';
 
 const Sidebar = () => {
   return (
-    <div className="sidebar">
-      <ul className="sidebar-menu">
-        <li className="menu-item">
-          <Link to="/budget">Budget</Link>
-        </li>
-        <li className="menu-item">
-          <Link to="/api/user/">Income</Link>
-        </li>
-        <li className="menu-item">
-          <Link to="/api/user/">Expense</Link>
-        </li>
-        <li className="menu-item">
-          <Link to="/transaction">Lend/Borrow</Link>
-        </li>
-        <li className="menu-item">
-          <Link to="/recurringExpense">Recurring Expense</Link>
-        </li>
-      </ul>
-    </div>
+    <Menu theme="dark" mode="inline" className="sidebar">
+      <Menu.Item key="1">
+        <Link to="/budget">Budget</Link>
+      </Menu.Item>
+      <Menu.Item key="2">
+        <Link to="/income/">Income</Link>
+      </Menu.Item>
+      <Menu.Item key="3">
+        <Link to="/expense/">Expense</Link>
+      </Menu.Item>
+      <Menu.Item key="4">
+        <Link to="/transaction">Lend/Borrow</Link>
+      </Menu.Item>
+      <Menu.Item key="5">
+        <Link to="/recurringExpense">Recurring Expense</Link>
+      </Menu.Item>
+    </Menu>
   );
 };
 

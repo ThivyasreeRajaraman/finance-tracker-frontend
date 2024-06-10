@@ -3,7 +3,7 @@ import { message } from 'antd';
 
 export const HandleErrorResponse = (error: any) => {
     if (axios.isAxiosError(error) && error.response) {
-        console.log("ress2::",error.response)
+        console.log("ress::",error.response)
         const errorResponse = error.response.data;
         console.log("err response;:",errorResponse)
         if(errorResponse.details) {

@@ -1,20 +1,28 @@
 import { formatDate, formatCurrency } from 'pages/generic/helpers/FormatHelpers';
-import { Popover, Button, Divider } from 'antd';
+import { Popover, Button, Divider, Space } from 'antd';
 import { MoreOutlined } from '@ant-design/icons';
 import { RecurringExpense } from '../store/RecurringExpenseTypes';
 import { ColumnProps } from 'antd/es/table';
+import './style.css'
 
 interface ColumnPropsWithActions extends ColumnProps<RecurringExpense> {
     render?: (text: any, record: RecurringExpense, index: number) => React.ReactNode;
 }
 
-const columns = (handleEdit: (record: RecurringExpense) => void, handleDelete: (record: RecurringExpense) => void): ColumnPropsWithActions[] => [
+const columns = (handleEdit: (record: RecurringExpense) => void, handleDelete: (record: RecurringExpense) => void, handleActivate: (record: any) => void): ColumnPropsWithActions[] => [
     {
         title: 'Created At',
         dataIndex: 'createdAt',
         key: 'createdAt',
         className: 'table-content-centered',
-        render: (date: string) => formatDate(date),
+        render: (createdAt: string, record: any) => {
+            return (
+                <Space direction="vertical">
+                    {record.active ? null : <div className="ribbon">Deactivated</div>}
+                    <div>{formatDate(createdAt)}</div>
+                </Space>
+            );
+        },
     },
     {
         title: 'Category',
@@ -44,9 +52,17 @@ const columns = (handleEdit: (record: RecurringExpense) => void, handleDelete: (
             <Popover
                 content={
                     <>
-                        <Button type="link" onClick={() => handleEdit(record)}>Edit</Button>
+                        {record.active ? (
+                            <Button  type="link" className="edit-button" onClick={() => handleEdit(record)}>
+                                Edit
+                            </Button>
+                        ) : (
+                            <Button type="link" className="activate-button" onClick={() => handleActivate(record)}>
+                                Activate
+                            </Button>
+                        )}
                         <Divider type="horizontal" />
-                        <Button type="link" onClick={() => handleDelete(record)}>Delete</Button>
+                        <Button type="link" className="delete-button" onClick={() => handleDelete(record)}>Delete</Button>
                     </>
                 }
                 trigger="click"

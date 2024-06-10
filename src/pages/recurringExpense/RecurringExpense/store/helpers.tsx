@@ -6,6 +6,7 @@ export const mapExpenseDataToFormType = (expenseData: any): CreateRecurringExpen
     amount: expenseData.expense.amount,
     frequency: expenseData.expense.frequency,
     next_expense_date: expenseData.expense.next_expense_date ? expenseData.expense.next_expense_date : null,
+    currency: expenseData.expense.currency,
   
   });
 
@@ -14,5 +15,5 @@ export const convertExpenseDataToFormType = (expenseData: any): CreateRecurringE
   amount: expenseData.amount,
   frequency: expenseData.frequency,
   next_expense_date: expenseData.next_expense_date ? moment(expenseData.next_expense_date) : null,
-
+  currency: expenseData.currency,
 });
