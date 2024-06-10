@@ -1,0 +1,34 @@
+.top-title {
+    position: fixed;
+    padding-left: 16px;
+    background-color: #37b4af;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 70px;
+    font-size: 18px;
+    border: none !important; /* Ensure no border is applied */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.top-title h2 {
+    color: #ffffff;
+    margin: 0;
+    width: 233px;
+}
+
+.remaining-content {
+    flex-grow: 1;
+    height:70px;
+    background-color: white !important;
+    border: none !important; /* Ensure no border is applied */
+}
+
+.user-profile {
+    margin-right: 16px;
+}
+
+.app-name {
+    cursor: pointer;
+}
