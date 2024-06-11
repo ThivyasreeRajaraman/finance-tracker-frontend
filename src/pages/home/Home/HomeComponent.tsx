@@ -1,6 +1,4 @@
 import { useState,Suspense } from 'react';
-import TopTitle from './components/toptitle/TopTitle';
-import Sidebar from './components/sidebar/SideBar';
 import './style.css';
 import { Row, Col } from 'antd';
 import CustomCard from 'pages/generic/components/Card/Card';

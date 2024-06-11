@@ -1,7 +1,7 @@
 import { selector, atom } from 'recoil';
 import apiClient from '../../../generic/apiUtils/client';
 import { RecurringExpenseFiltersAtom,CreateRecurringExpensePayloadAtom } from './RecurringExpenseAtoms';
-import { DataResponseType, ErrorResponseType,DataResponseForExistingEntry } from '../../../generic/apiUtils/apiTypes';
+import { DataResponseType, DataResponseForExistingEntry } from '../../../generic/apiUtils/apiTypes';
 import { HandleErrorResponse } from 'pages/generic/apiUtils/apiErrorHandling';
 import { expenseIdState } from './RecurringExpenseAtoms';
 import { mapExpenseDataToFormType } from './helpers';

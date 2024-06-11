@@ -10,6 +10,7 @@ import GenericButton from 'pages/generic/components/Button/Button';
 import { FORM_RULE, TRANSACTION_OPTIONS } from 'pages/generic/helpers/const';
 import { CreateLendBorrowFormType,CreateLendBorrowPayloadType } from '../store/LendBorrowTypes';
 import { useParams } from 'react-router-dom';
+import { fetchCurrenciesSelector } from 'pages/home/Home/store/CurrencySelectors';
 
 const { Option } = Select;
 const { Item } = Form;
@@ -20,6 +21,7 @@ const CreateLendBorrowModal = () => {
     const [transactionIdFromState, setTransactionIdState] = useRecoilState(transactionIdState);
     const [LendBorrowPayload, setLendBorrowPayload] = useRecoilState(CreateLendBorrowPayloadAtom);
     const partnersLoadable = useRecoilValueLoadable(fetchPartnersSelector);
+    const currenciesLoadable =useRecoilValueLoadable(fetchCurrenciesSelector)
     const lendBorrowDataLoadable = useRecoilValueLoadable(lendBorrowDataSelector);
     const createOrUpdateLendBorrowLoadable = useRecoilValueLoadable(createOrUpdateLendBorrow);
     const [CreateLendBorrowForm] = useForm<CreateLendBorrowFormType>();
@@ -64,6 +66,7 @@ const CreateLendBorrowModal = () => {
             amount: amountString,
             transaction_type: values.transaction_type,
             payment_due_date: isoDateString,
+            currency:values.currency,
         };
         setLendBorrowPayload(updatedLendBorrowValues)
     };
@@ -98,7 +101,7 @@ const CreateLendBorrowModal = () => {
                         ))
                     ) : (
                         <Option value="" disabled>
-                            No partners available
+                            Select Partner
                         </Option>
                     )}
                     <Option value="Others">New Partner</Option>
@@ -120,6 +123,22 @@ const CreateLendBorrowModal = () => {
                     rules={[{ required: true, message: FORM_RULE }]}
                 >
                     <Input type="text" placeholder='Enter amount' />
+                </Form.Item>
+                <Form.Item
+                    label="Currency"
+                    name="currency"
+                    rules={[{ required: true, message: FORM_RULE }]}
+                >
+                    <Select placeholder="Select Currency" defaultValue={localStorage.getItem('currency')} disabled={false} allowClear showSearch className='currency-dropdown'>
+                        {currenciesLoadable.state === 'loading' && <Option value="">Loading...</Option>}
+                        {currenciesLoadable.state === 'hasError' && <Option value="">Error loading currencies</Option>}
+                        {currenciesLoadable.state === 'hasValue' &&
+                            currenciesLoadable.contents.map((currency: string, index: number) => (
+                                <Option key={index} value={currency}>
+                                    {currency}
+                                </Option>
+                            ))}
+                    </Select>
                 </Form.Item>
 
                 <Item

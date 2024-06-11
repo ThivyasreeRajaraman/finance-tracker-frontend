@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useRecoilState, useRecoilValueLoadable, useSetRecoilState } from 'recoil';
-import { Table, message } from 'antd';
+import { Table,Select, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { getLendBorrow,createOrUpdateLendBorrow } from '../store/LendBorrowSelectors';
 import { LendBorrowFiltersAtom,LendBorrowAtom,CreateLendBorrowPayloadAtom } from '../store/LendBorrowAtoms';
@@ -9,6 +9,8 @@ import { LendBorrow } from '../store/LendBorrowTypes';
 import apiClient from 'pages/generic/apiUtils/client';
 import { DataResponseType } from 'pages/generic/apiUtils/apiTypes';
 import './style.css';
+
+const { Option } = Select;
 
 interface LendBorrowListProps {
     onEdit?: (lendBorrow: LendBorrow) => void;
@@ -23,6 +25,7 @@ const LendBorrowList: React.FC<LendBorrowListProps> = ({ onEdit, onDelete }) => 
     const createOrUpdateLendBorrowLoadable = useRecoilValueLoadable(createOrUpdateLendBorrow);
     const [lendBorrowPayload, setLendBorrowPayload] = useRecoilState(CreateLendBorrowPayloadAtom);
     const [currPage, setCurrPage] = useState(1);
+    const [filter, setFilter] = useState<'all' | 'lend' | 'borrow'>('all');
 
     
 
@@ -48,28 +51,24 @@ const LendBorrowList: React.FC<LendBorrowListProps> = ({ onEdit, onDelete }) => 
         }));
     }, [setLendBorrowData]);
 
-    const handleEdit = (record: LendBorrow) => {
-        console.log("rec::",record)
-        navigate(`/transaction/${record.id}/edit`);
-    };
 
-    const handleDelete = async (record: LendBorrow) => {
-        try {
-            const token = localStorage.getItem('token');
-            await apiClient(token).delete<DataResponseType>(`api/user/transaction/${record.id}`); 
-            message.success('Transaction deleted successfully');
-            onDelete?.(record); // Trigger the onDelete callback to update the UI
-        } catch (error) {
-            console.error('Error deleting transaction:', error);
-            message.error('Failed to delete transaction');
-        }
+    const handleFilterChange = (value: 'all' | 'lend' | 'borrow') => {
+        setLendBorrowData((prevState) => ({
+            ...prevState,
+            filter: value,
+        }));
     };
     
 
     return (
         <>
+            <Select<'all' | 'lend' | 'borrow'> placeholder="Transaction type filter" style={{ width: 200 , marginBottom: 16 }} onChange={handleFilterChange}>
+                <Option value="all">All Transactions</Option>
+                <Option value="lend">Lend</Option>
+                <Option value="borrow">Borrow</Option>
+            </Select>
             <Table
-                columns={columns(handleEdit, handleDelete)}
+                columns={columns()}
                 dataSource={data}
                 pagination={{
                     current: currPage,

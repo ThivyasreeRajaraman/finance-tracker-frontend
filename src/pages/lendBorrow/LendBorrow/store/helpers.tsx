@@ -6,6 +6,7 @@ export const mapLendBorrowDataToFormType = (LendBorrowData: any): CreateLendBorr
     amount: LendBorrowData.lendBorrow.amount,
     transaction_type: LendBorrowData.lendBorrow.transaction_type,
     payment_due_date: LendBorrowData.lendBorrow.payment_due_date ? LendBorrowData.lendBorrow.payment_due_date : null,
+    currency:LendBorrowData.lendBorrow.transaction_type.currency,
   
   });
 
@@ -14,4 +15,5 @@ export const convertLendBorrowDataToFormType = (LendBorrowData: any): CreateLend
   amount: LendBorrowData.amount,
   transaction_type: LendBorrowData.transaction_type,
   payment_due_date: LendBorrowData.payment_due_date ? moment(LendBorrowData.payment_due_date) : null,
+  currency:LendBorrowData.currency,
 });

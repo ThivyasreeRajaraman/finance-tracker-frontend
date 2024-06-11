@@ -8,7 +8,7 @@ interface ColumnPropsWithActions extends ColumnProps<LendBorrow> {
     render?: (text: any, record: LendBorrow, index: number) => React.ReactNode;
 }
 
-const columns = (handleEdit: (record: LendBorrow) => void, handleDelete: (record: LendBorrow) => void): ColumnPropsWithActions[] => [
+const columns = (): ColumnPropsWithActions[] => [
     {
         title: 'Transaction Partner',
         dataIndex: 'transactionPartner',
