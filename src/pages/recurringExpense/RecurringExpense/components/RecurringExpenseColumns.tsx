@@ -9,7 +9,7 @@ interface ColumnPropsWithActions extends ColumnProps<RecurringExpense> {
     render?: (text: any, record: RecurringExpense, index: number) => React.ReactNode;
 }
 
-const columns = (handleEdit: (record: RecurringExpense) => void, handleDelete: (record: RecurringExpense) => void, handleActivate: (record: any) => void): ColumnPropsWithActions[] => [
+const columns = (handleEdit: (record: RecurringExpense) => void, handleDelete: (record: RecurringExpense) => void, handleActivate: (record: RecurringExpense) => void): ColumnPropsWithActions[] => [
     {
         title: 'Created At',
         dataIndex: 'createdAt',
@@ -36,7 +36,11 @@ const columns = (handleEdit: (record: RecurringExpense) => void, handleDelete: (
         dataIndex: 'amount',
         key: 'amount',
         className: 'table-content-centered',
-        render: (amount: number) => formatCurrency(amount),
+        render: (amount: number, record: RecurringExpense) => (
+            <>
+                {formatCurrency(amount, record.currency)}
+            </>
+        ),
     },
     {
         title: 'Next Expense Date',

@@ -9,7 +9,7 @@ export interface RecurringExpenseFilters {
 }
 
 export const formState = atom<CreateRecurringExpenseFormType>({
-  key: 'formState',
+  key: 'recurringExpenseFormState',
   default: {
     category_name: undefined,
     amount: null,
@@ -27,9 +27,23 @@ export const RecurringExpenseFiltersAtom = atom<RecurringExpenseFilters>({
   },
 });
 
+const defaultRecurringExpense: RecurringExpense = {
+  id: 0,
+  userId: 0,
+  categoryId: 0,
+  category: '',
+  amount: 0,
+  frequency: '',
+  nextExpenseDate: '',
+  createdAt: '',
+  updatedAt: '',
+  active: true,
+  currency: ''
+};
+
 export const RecurringExpensesAtom = atom<RecurringExpense[]>({
     key: 'recurringExpenses',
-    default: [],
+    default: [defaultRecurringExpense],
 });
 
 export const expenseIdState = atom<string | null>({
