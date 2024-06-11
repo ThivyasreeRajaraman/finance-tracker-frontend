@@ -10,9 +10,11 @@ import { getLoadableStateAndContents } from 'pages/generic/helpers/LoadableHelpe
 import GenericButton from 'pages/generic/components/Button/Button';
 import { FORM_RULE } from 'pages/generic/helpers/const';
 import { DataResponseType } from 'pages/generic/apiUtils/apiTypes';
+import { PlusCircleOutlined, DeleteOutlined } from '@ant-design/icons';
 
 import { CreateBudgetFormType,CreateBudgetPayloadType } from '../store/BudgetTypes';
 import { convertBudgetDataToFormType } from '../store/helpers';
+import { fetchCurrenciesSelector } from 'pages/home/Home/store/CurrencySelectors';
 
 const { Option } = Select;
 const { Item,List } = Form;
@@ -24,6 +26,7 @@ CreateBudgetModal = () => {
     const [budgetIdFromState, setBudgetIdState] = useRecoilState(budgetIdState);
     const [budgetPayload, setBudgetPayload] = useRecoilState(CreateBudgetPayloadAtom);
     const categoriesLoadable = useRecoilValueLoadable(fetchCategoriesSelector);
+    const currenciesLoadable =useRecoilValueLoadable(fetchCurrenciesSelector)
     const budgetDataLoadable = useRecoilValueLoadable(budgetDataSelector);
     const createOrUpdateBudgetLoadable = useRecoilValueLoadable(createOrUpdateBudget);
     const [CreateBudgetForm] = useForm<CreateBudgetFormType>();
@@ -49,6 +52,15 @@ CreateBudgetModal = () => {
                 const mappedValues = convertBudgetDataToFormType(contents.budgets);
                 CreateBudgetForm.setFieldsValue(mappedValues);
             }
+        }else {
+            CreateBudgetForm.setFieldsValue({
+                budgets: [{
+                    category_name: '',
+                    amount: null,
+                    threshold: null,
+                    currency:localStorage.getItem('currency') || '',
+                }]
+            });
         }
 
     }, [budgetDataLoadable, budgetId]);
@@ -96,6 +108,7 @@ CreateBudgetModal = () => {
                 category_name: budget.category_name,
                 amount: amountNumber,
                 threshold: thresholdNumber,
+                currency:budget.currency,
             };
         });
 
@@ -107,6 +120,14 @@ CreateBudgetModal = () => {
 
     const handleReset = () => {
         CreateBudgetForm.resetFields();
+        CreateBudgetForm.setFieldsValue({
+            budgets: [{
+                category_name: '',
+                amount: null,
+                threshold: null,
+                currency:localStorage.getItem('currency') || '',
+            }]
+        });
     };
 
 
@@ -125,6 +146,9 @@ CreateBudgetModal = () => {
                     <>
                         {fields.map(({ key, name, ...restField }) => (
                             <div key={key}>
+                                <Row gutter={[0, 5]}>
+                                    <Col>
+                                    
                                 <Item
                                     {...restField}
                                     label="Category"
@@ -140,7 +164,10 @@ CreateBudgetModal = () => {
                                         ))}
                                     </Select>
                                 </Item>
+                                </Col>
 
+                                <Col >
+                                    
                                 <Item
                                     {...restField}
                                     label="Amount"
@@ -150,34 +177,59 @@ CreateBudgetModal = () => {
                                 >
                                     <Input type="text" placeholder='Enter amount'/>
                                 </Item>
+                                </Col>
+                                <Form.Item
+                                    label="Currency"
+                                    name={[name, 'currency']}
+                                    rules={[{ required: true, message: FORM_RULE }]}
+                                >
+                                    <Select placeholder="Select Currency" defaultValue={localStorage.getItem('currency')} disabled={false} allowClear showSearch className='currency-dropdown'>
+                                        {currenciesLoadable.state === 'loading' && <Option value="">Loading...</Option>}
+                                        {currenciesLoadable.state === 'hasError' && <Option value="">Error loading currencies</Option>}
+                                        {currenciesLoadable.state === 'hasValue' &&
+                                            currenciesLoadable.contents.map((currency: string, index: number) => (
+                                                <Option key={index} value={currency}>
+                                                    {currency}
+                                                </Option>
+                                            ))}
+                                    </Select>
+                                </Form.Item>
 
+                                <Col >      
                                 <Item
                                     {...restField}
                                     label="Threshold"
                                     name={[name, 'threshold']}
                                     fieldKey={key}
                                     rules={[{ required: true, message: FORM_RULE }]}
+                                    style={{ width: 300 }}
                                 >
                                     <Input type="text" placeholder='Enter threshold'/>
                                 </Item>
+                                </Col>
                                 
+                                <Col>
                                 {budgetId ? null : (
                                 <Item>
+                                    
                                     <Space>
-                                        <Button className='reset-button' onClick={() => remove(name)}>Remove Budget</Button>
+                                        <Button className='reset-button' onClick={() => remove(name)} icon={<DeleteOutlined />}/>
                                     </Space>
                                 </Item>
                                 )}
+                                </Col>
+                                </Row>
                             </div>
                         ))}
                         {budgetId ? null :(
                         <Item>
-                            <Button className='generic-button' onClick={() => add()}>Add Budget</Button>
+                            <Button className='generic-button' onClick={() => add()} icon={<PlusCircleOutlined />}/>
                         </Item>
                         )}
                     </>
                 )}
             </List>
+            
 
             <Row className='button-row'>
                     <Col>

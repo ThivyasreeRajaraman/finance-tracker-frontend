@@ -1,4 +1,4 @@
-import { Button, Form, Input, message, Select, Space,Typography,Descriptions } from 'antd';
+import { Button, Form, Input, message, Select, Space,Typography,Descriptions,Row,Col } from 'antd';
 import { useState } from 'react';
 import { ErrorResponseType } from 'pages/generic/apiUtils/apiTypes';
 import { useForm } from 'antd/lib/form/Form';
@@ -10,6 +10,7 @@ import { fetchUserSelector,mapUserDataToFormType, updateUserProfile } from '../s
 import { ProfileFormType } from '../store/profileType';
 import { RuleObject } from 'antd/es/form';
 import './style.css';
+import { FORM_RULE } from 'pages/generic/helpers/const';
 
 const { Option } = Select;
 const { Text } = Typography;
@@ -73,12 +74,19 @@ const EditProfileModal = () => {
                 validateTrigger="onChange"
             >
                 <Form.Item
+                    label="Name"
+                    name="name"
+                    rules={[{ required: true },validateAtLeastOneField]}
+                >
+                    <Input type="text" />
+                </Form.Item>
+                <Form.Item
                     label="Currency"
                     name="default_currency"
                     
-                    rules={[{ required: true }, validateAtLeastOneField]}
+                    rules={[{ required: true ,message: FORM_RULE}, validateAtLeastOneField]}
                 >
-                    <Select onChange={handleSelectCurrency} placeholder="Select Currency" disabled={false} allowClear>
+                    <Select onChange={handleSelectCurrency} placeholder="Select Currency" disabled={false} showSearch>
                         {currenciesLoadable.state === 'loading' && <Option value="">Loading...</Option>}
                         {currenciesLoadable.state === 'hasError' && <Option value="">Error loading currencies</Option>}
                         {currenciesLoadable.state === 'hasValue' &&
@@ -90,30 +98,21 @@ const EditProfileModal = () => {
                     </Select>
                 </Form.Item>
 
-
-                <Form.Item
-                    label="Name"
-                    name="name"
-                    rules={[{ required: true },validateAtLeastOneField]}
-                >
-                    <Input type="text" />
-                </Form.Item>
-                {/* <Descriptions column={1} bordered>
-                        <Descriptions.Item label="Name">{formData.name}</Descriptions.Item>
-                    </Descriptions> */}
-
-                <Form.Item
-                    wrapperCol={{ offset: 8 }}
-                >
-                    <Space>
-                        <Button htmlType="button" onClick={handleCancel} >
-                            Cancel
-                        </Button>
-                        <Button type="primary" htmlType="submit" >
-                            Update
-                        </Button>
-                    </Space>
-                </Form.Item>
+                <Row className='button-row'>
+                    <Col>
+                        <Form.Item wrapperCol={{ offset: 0 }}>
+                            <Space>
+                            <Button htmlType="button" className='cancel-button' onClick={handleCancel} >
+                                Cancel
+                            </Button>
+                            <Button type="primary" className='update-button' htmlType="submit" >
+                                Update
+                            </Button>
+                        
+                            </Space>
+                        </Form.Item>
+                    </Col>
+                </Row>
             </Form>
 
         </>

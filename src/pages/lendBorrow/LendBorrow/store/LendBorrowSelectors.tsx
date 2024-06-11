@@ -1,11 +1,10 @@
 import { selector, atom } from 'recoil';
 import apiClient from '../../../generic/apiUtils/client';
 import { LendBorrowFiltersAtom,CreateLendBorrowPayloadAtom,transactionIdState } from './LendBorrowAtoms';
-import { DataResponseType, ErrorResponseType,DataResponseForExistingEntry } from '../../../generic/apiUtils/apiTypes';
+import { DataResponseType,DataResponseForExistingEntry } from '../../../generic/apiUtils/apiTypes';
 import { HandleErrorResponse } from 'pages/generic/apiUtils/apiErrorHandling';
 import { mapLendBorrowDataToFormType } from './helpers';
 
-import axios from 'axios';
 
 export const getLendBorrow = selector<{
   data: any[];
@@ -38,9 +37,15 @@ export const getLendBorrow = selector<{
       transactionType:item.closing_balance < 0 ? "Lend" : "Borrow",
     }));
     console.log("selcteddata::", selectedData)
-    console.log("data::", response.data)
+    const filteredData = selectedData.filter((item: any) => {
+      if (filters.filter === 'all') return true;
+      if (filters.filter === 'lend') return item.transactionType === 'Lend';
+      if (filters.filter === 'borrow') return item.transactionType === 'Borrow';
+      return true;
+    });
+    console.log("filteredData::",filteredData)
     return {
-      data: selectedData,
+      data: filteredData,
       page: response.data.page,
       limit: response.data.limit,
       totalPages: response.data.totalPages,
@@ -121,6 +126,4 @@ export const lendBorrowDataSelector = selector({
     }
   },
 });
-
-
 

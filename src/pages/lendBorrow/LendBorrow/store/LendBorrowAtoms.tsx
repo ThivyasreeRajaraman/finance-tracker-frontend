@@ -4,6 +4,7 @@ import { CreateLendBorrowFormType,CreateLendBorrowPayloadType } from './LendBorr
 export interface LendBorrowFilters {
   page: string;
   limit?: string;
+  filter: 'all' | 'lend' | 'borrow';
 }
 
 export const formState = atom<CreateLendBorrowFormType>({
@@ -13,6 +14,7 @@ export const formState = atom<CreateLendBorrowFormType>({
     amount: null,
     transaction_type: '',
     payment_due_date: null,
+    currency:localStorage.getItem('currency') || '',
   }
 });
 
@@ -21,6 +23,7 @@ export const LendBorrowFiltersAtom = atom<LendBorrowFilters>({
   default: {
     page: '1',
     limit: '10',
+    filter: 'all',
   },
 });
 
@@ -40,6 +43,7 @@ export const CreateLendBorrowPayloadAtom = atom<CreateLendBorrowPayloadType>({
     transaction_partner: '',
     amount: null,
     transaction_type: '',
-    payment_due_date: ''
+    payment_due_date: '',
+    currency: localStorage.getItem('currency') || '',
   }
 });

@@ -9,6 +9,7 @@ export type CreateLendBorrowFormType = {
     amount: number | null;
     transaction_type?: string;
     payment_due_date: null | Moment;
+    currency:string;
 };
 
 export type CreateLendBorrowPayloadType = {
@@ -16,6 +17,7 @@ export type CreateLendBorrowPayloadType = {
     amount: number | null;
     transaction_type?: string;
     payment_due_date: string | undefined;
+    currency: string,
 };
 
 export interface LendBorrow {
