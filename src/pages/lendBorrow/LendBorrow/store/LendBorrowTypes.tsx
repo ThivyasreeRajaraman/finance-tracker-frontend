@@ -30,5 +30,6 @@ export interface LendBorrow {
     paymentDueDate: string;
     createdAt: string;
     updatedAt: string;
+    currency: string;
   }
   

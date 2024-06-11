@@ -14,6 +14,7 @@ import { CreateRecurringExpenseFormType, CreateRecurringExpensePayloadType } fro
 import { useParams } from 'react-router-dom';
 import { Modal, Spin } from 'antd';
 import { DataResponseType } from 'pages/generic/apiUtils/apiTypes';
+import { fetchCurrenciesSelector } from 'pages/home/Home/store/CurrencySelectors';
 
 const { Option } = Select;
 const { Item } = Form;
@@ -26,6 +27,7 @@ const CreateRecurringExpenseModal = () => {
     const categoriesLoadable = useRecoilValueLoadable(fetchRecurringExpenseCategoriesSelector);
     const expenseDataLoadable = useRecoilValueLoadable(expenseDataSelector);
     const createOrUpdateRecurringExpenseLoadable = useRecoilValueLoadable(createOrUpdateRecurringExpense);
+    const currenciesLoadable = useRecoilValueLoadable(fetchCurrenciesSelector);
     const [CreateRecurringExpenseForm] = useForm<CreateRecurringExpenseFormType>();
     const formValues = useRecoilValue(formState);
 
@@ -130,7 +132,7 @@ const CreateRecurringExpenseModal = () => {
 
                 >
                     <Row justify="space-between">
-                        <Col>
+                        <Col span={12}>
                             <Form.Item
                                 label="Category"
                                 name="category_name"
@@ -162,8 +164,7 @@ const CreateRecurringExpenseModal = () => {
                         )}
                         </Col>
 
-                        <Col>
-
+                        <Col span={9}>
                             <Form.Item
                                 label="Amount"
                                 name="amount"
@@ -172,10 +173,28 @@ const CreateRecurringExpenseModal = () => {
                                 <Input type="text" placeholder='Enter amount' />
                             </Form.Item>
                         </Col>
+                        <Col span={3}>
+                            <Form.Item
+                                label="Currency"
+                                name="currency"
+                                rules={[{ required: true, message: FORM_RULE }]}
+                            >
+                                <Select placeholder="Select Currency" defaultValue={localStorage.getItem('currency')} disabled={false} allowClear showSearch className='currency-dropdown-recurring-expense'>
+                                    {currenciesLoadable.state === 'loading' && <Option value="">Loading...</Option>}
+                                    {currenciesLoadable.state === 'hasError' && <Option value="">Error loading currencies</Option>}
+                                    {currenciesLoadable.state === 'hasValue' &&
+                                        currenciesLoadable.contents.map((currency: string, index: number) => (
+                                            <Option key={index} value={currency}>
+                                                {currency}
+                                            </Option>
+                                        ))}
+                                </Select>
+                            </Form.Item>
+                        </Col>
 
                     </Row>
                     <Row justify="space-between" className='last-row'>
-                        <Col>
+                        <Col span={12}>
                             <Item
                                 label="Frequency"
                                 name="frequency"
@@ -190,7 +209,7 @@ const CreateRecurringExpenseModal = () => {
                                 </Select>
                             </Item>
                         </Col>
-                        <Col>
+                        <Col span={12}>
                             <Form.Item
                                 label="Next Expense Date"
                                 name="next_expense_date"

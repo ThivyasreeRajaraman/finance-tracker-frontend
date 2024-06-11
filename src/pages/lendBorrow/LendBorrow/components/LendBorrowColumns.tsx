@@ -7,8 +7,8 @@ import { ColumnProps } from 'antd/es/table';
 interface ColumnPropsWithActions extends ColumnProps<LendBorrow> {
     render?: (text: any, record: LendBorrow, index: number) => React.ReactNode;
 }
-
-const columns = (): ColumnPropsWithActions[] => [
+const currencyCode = localStorage.getItem('currency') ?? 'INR'
+const columns = (handleEdit: (record: LendBorrow) => void, handleDelete: (record: LendBorrow) => void): ColumnPropsWithActions[] => [
     {
         title: 'Transaction Partner',
         dataIndex: 'transactionPartner',
@@ -21,7 +21,7 @@ const columns = (): ColumnPropsWithActions[] => [
         dataIndex: 'amount',
         key: 'amount',
         className: 'table-content-centered',
-        render: (amount: number) => formatCurrency(amount),
+        render: (amount: number) => formatCurrency(amount, currencyCode),
     },
     {
         title: 'Transaction Type',

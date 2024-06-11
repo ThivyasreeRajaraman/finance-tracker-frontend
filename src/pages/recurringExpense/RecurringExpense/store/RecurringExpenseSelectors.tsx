@@ -1,10 +1,12 @@
-import { selector, atom } from 'recoil';
+import { selector, atom, useRecoilValue, useRecoilState } from 'recoil';
 import apiClient from '../../../generic/apiUtils/client';
-import { RecurringExpenseFiltersAtom,CreateRecurringExpensePayloadAtom } from './RecurringExpenseAtoms';
+import { RecurringExpenseFiltersAtom } from './RecurringExpenseAtoms';
 import { DataResponseType, DataResponseForExistingEntry } from '../../../generic/apiUtils/apiTypes';
 import { HandleErrorResponse } from 'pages/generic/apiUtils/apiErrorHandling';
-import { expenseIdState } from './RecurringExpenseAtoms';
+import { expenseIdState, formState } from './RecurringExpenseAtoms';
 import { mapExpenseDataToFormType } from './helpers';
+import { CreateRecurringExpensePayloadAtom } from './RecurringExpenseAtoms';
+import { modalVisibleState, NotificationAtom } from 'pages/home/Home/store/HomeAtoms';
 
 export const getRecurringExpenses = selector<{
   data: any[];
@@ -17,8 +19,9 @@ export const getRecurringExpenses = selector<{
   get: async ({ get }) => {
     const token = localStorage.getItem('token');
     const api = apiClient(token);
-
+    const modalVisible = get(modalVisibleState)
     const filters = get(RecurringExpenseFiltersAtom);
+    const notificationData = get(NotificationAtom);
     const response = await api.get('api/user/recurringExpense', {
       params: {
         pageNumber: filters.page,
@@ -32,6 +35,8 @@ export const getRecurringExpenses = selector<{
       category: item.Category?.name,
       amount: item.amount,
       nextExpenseDate: item.next_expense_date,
+      active: item.active,
+      currency: item.currency
     }));
     console.log("data::", selectedData)
     console.log("data::", response.data)
@@ -46,13 +51,13 @@ export const getRecurringExpenses = selector<{
 });
 
 export const fetchRecurringExpenseCategoriesSelector = selector({
-  key: 'fetchRecurruringExpenseCategoriesSelector',
+  key: 'fetchRecurringExpenseCategoriesSelector',
   get: async () => {
     try {
       const token = localStorage.getItem('token');
       const api = apiClient(token);
       const response = await api.get('api/categories/recurringExpense');
-      console.log(response)
+      console.log("rec categ:",response)
       return response.data.data;
     } catch (error) {
       console.error('Error fetching categories:', error);
@@ -65,7 +70,6 @@ export const createRecurringExpenseState = atom<any>({
   key: 'createRecurringExpenseState',
   default: {},
 });
-
 
 export const createOrUpdateRecurringExpense = selector({
   key: 'createOrUpdateRecurringExpense',
@@ -105,8 +109,6 @@ export const expenseDataSelector = selector({
       const token = localStorage.getItem('token');
       const response = await apiClient(token).get<DataResponseType>(`api/user/recurringExpense/${expenseId}`);
       const expenseData = response.data;
-      console.log("fetch::", expenseData);
-      console.log("valll:::", mapExpenseDataToFormType(expenseData));
       return mapExpenseDataToFormType(expenseData);
     } catch (error) {
       console.error('Error fetching expense data:', error);
@@ -115,6 +117,3 @@ export const expenseDataSelector = selector({
     }
   },
 });
-
-
-

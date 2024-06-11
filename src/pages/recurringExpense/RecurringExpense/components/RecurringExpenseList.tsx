@@ -9,6 +9,7 @@ import { RecurringExpense } from '../store/RecurringExpenseTypes';
 import apiClient from 'pages/generic/apiUtils/client';
 import { DataResponseType } from 'pages/generic/apiUtils/apiTypes';
 import './style.css';
+import { modalVisibleState } from 'pages/home/Home/store/HomeAtoms';
 
 interface RecurringExpenseListProps {
     onEdit?: (expense: RecurringExpense) => void;
@@ -24,6 +25,7 @@ const RecurringExpenseList = ({ onEdit, onDelete, onActivate }: RecurringExpense
     const [recurringExpensePayload, setRecurringExpensePayload] = useRecoilState(CreateRecurringExpensePayloadAtom);
     const createOrUpdateRecurringExpenseLoadable = useRecoilValueLoadable(createOrUpdateRecurringExpense);
     const [currPage, setCurrPage] = useState(1);
+    const [modalVisible, setModalVisible] = useRecoilState(modalVisibleState);
 
 
     const loadable = useRecoilValueLoadable(getRecurringExpenses);
@@ -35,7 +37,7 @@ const RecurringExpenseList = ({ onEdit, onDelete, onActivate }: RecurringExpense
         if (loadable.state === 'hasValue') {
             setRecurringExpenses(data);
         }
-    }, [loadable, data, recurringExpensesData, recurringExpensePayload, setRecurringExpenses, setRecurringExpensePayload, createOrUpdateRecurringExpenseLoadable, CreateRecurringExpensePayloadAtom]);
+    }, [loadable, setModalVisible, modalVisible, data, recurringExpensesData, recurringExpensePayload, setRecurringExpenses, setRecurringExpensePayload, createOrUpdateRecurringExpenseLoadable, CreateRecurringExpensePayloadAtom]);
 
     const handlePageChange = useCallback((page: number) => {
         setCurrPage(page);
@@ -70,22 +72,21 @@ const RecurringExpenseList = ({ onEdit, onDelete, onActivate }: RecurringExpense
 
     const handleActivate = async (record: RecurringExpense) => {
         try {
+            console.log("reccccc:",record)
             const token = localStorage.getItem('token');
             await await apiClient(token).put<DataResponseType>(`api/user/recurringExpense/${record.id}`, { active: true });
             message.success('Recurring expense activated successfully');
             onActivate?.(record);
-            setRecurringExpenses(prevData =>
-                // prevData.map(expense =>
-                //     expense.id === record.id ? { ...expense, active: true } : expense
-                // )
-                prevData.map((expense) => {
-                    if (expense.id === record.id) {
-                      return { ...expense, active: true };
-                    }
-                    console.log("expppp",expense)
-                    return expense;
-                  })
-            );
+            setModalVisible(false)
+            setRecurringExpenses((prevData) => {
+                const updatedExpenses = prevData.map((expense) =>
+                    expense.id === record.id ? { ...expense, active: true } : expense
+                );
+            
+                console.log("Updated expenses:", updatedExpenses);
+            
+                return updatedExpenses;
+            });
             setRecurringExpensesData((prevState) => ({
                 ...prevState,
                 page: '1',

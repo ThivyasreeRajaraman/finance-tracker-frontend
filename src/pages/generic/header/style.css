@@ -26,8 +26,8 @@
     margin-right: 20px !important;
 }
 
-.back-button,
-.custom-button {
+.back-button:hover,
+.custom-button:hover {
   border: none;
   background-color: transparent;
   cursor: pointer;

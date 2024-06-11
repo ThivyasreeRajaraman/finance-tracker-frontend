@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import './style.css';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilValue, useRecoilState, useRecoilValueLoadable } from 'recoil';
+import { useRecoilValue, useRecoilState, useRecoilValueLoadable, useSetRecoilState } from 'recoil';
 import { isUserLoggedIn } from 'pages/login/Login/store/LoginSelector';
 import { Row, Col, Modal, Button, Spin, Badge } from 'antd';
 import LoadingIndicator from 'pages/generic/components/Loader/Loader';
@@ -12,15 +12,19 @@ import { modalVisibleState } from '../../store/HomeAtoms';
 import apiClient from 'pages/generic/apiUtils/client';
 import { HandleErrorResponse } from 'pages/generic/apiUtils/apiErrorHandling';
 import { message } from 'antd';
-import UserProfile from '../userProfile/UserProfile';
+import UserProfile from '../userprofile/UserProfile';
+import { RecurringExpensesAtom } from 'pages/recurringExpense/RecurringExpense/store/RecurringExpenseAtoms';
+import { remindersAtom, NotificationAtom } from '../../store/HomeAtoms';
 
 const TopTitle = () => {
   const navigate = useNavigate();
   const notificationIconRef = useRef(null);
   const isAuthenticated = useRecoilValue(isUserLoggedIn);
   const [modalVisible, setModalVisible] = useRecoilState(modalVisibleState);
-  const [reminders, setReminders] = useState<ReminderMessageType[]>([]);
+  const [notificationData, setNotification] = useRecoilState(NotificationAtom);
+  const [reminders, setReminders] = useRecoilState(remindersAtom)
   const remindersDataLoadable = useRecoilValueLoadable(remindersDataSelector);
+  const [recurringExpenses, setRecurringExpenses] = useRecoilState(RecurringExpensesAtom);
   const { loading: notificationLoading, error: notificationError, data: notification } = getLoadableStateAndContents(remindersDataLoadable);
 
   useEffect(() => {
@@ -31,15 +35,17 @@ const TopTitle = () => {
 
   useEffect(() => {
     if (remindersDataLoadable.state === 'hasValue') {
-      const data = notification as RemindersData;
+      const data = remindersDataLoadable.contents as RemindersData;
       if (data && data.Reminder) {
         setReminders(data.Reminder);
       } else {
         setReminders([]);
       }
     }
-  }, [notification, remindersDataLoadable]);
+  }, [notification, remindersDataLoadable, setModalVisible, recurringExpenses, setRecurringExpenses]);
+  
 
+  console.log("reminder datSSASA:",remindersDataLoadable.contents)
   const handleTitleClick = () => {
     navigate('/homepage');
   };
@@ -52,23 +58,34 @@ const TopTitle = () => {
     setModalVisible(false);
   };
 
+  const updateRemindersState = (id: number) => {
+    setReminders((prevReminders) => prevReminders.filter(reminder => reminder.id !== id));
+    handleModalClose();
+  };
+
   const renderReminders = () => {
-    return reminders.map((reminder: ReminderMessageType, index: number) => {
-      return (
-        <div key={index}>
-          <p className='reminder-message'>{reminder.reminders}</p>
-          <Button className='continue-button' onClick={() => handleContinue(reminder.id)}>Continue</Button>
-          <Button className='deactivate-button' onClick={() => handleDeactivate(reminder.id)}>Deactivate</Button>
-        </div>
-      );
-    });
+    return (
+      <>
+        <p>Do you want to update next expense date and continue?</p>
+        {reminders.map((reminder: ReminderMessageType, index: number) => {
+          return (
+            <div key={index}>
+              <p className='reminder-message'>{reminder.reminders}</p>
+              <Button className='continue-button' onClick={() => handleContinue(reminder.id)}>Continue</Button>
+              <Button className='deactivate-button' onClick={() => handleDeactivate(reminder.id)}>Deactivate</Button>
+            </div>
+          );
+        })}
+      </>
+    );
   };
 
   const handleContinue = async (id: number) => {
     try {
       const token = localStorage.getItem('token');
       await apiClient(token).put(`api/user/recurringExpense/${id}/updateNextExpenseDate`);
-      handleModalClose();
+      setNotification({ actionDone: true });
+      updateRemindersState(id);
       message.success('Next expense date is updated successfully');
     } catch (error) {
       console.error('Error updating next expense date:', error);
@@ -80,7 +97,8 @@ const TopTitle = () => {
     try {
       const token = localStorage.getItem('token');
       await apiClient(token).put(`api/user/recurringExpense/${id}`, { active: false });
-      handleModalClose();
+      setNotification({ actionDone: true });
+      updateRemindersState(id);
       message.success('Recurring expense deactivated successfully');
     } catch (error) {
       console.error('Error deactivating recurring expense:', error);
@@ -88,6 +106,7 @@ const TopTitle = () => {
     }
   };
 
+  console.log("rem::",reminders)
   return (
     <>
       <Row className='top-title' align='middle' justify='space-between'>

@@ -1,3 +1,5 @@
+import { TransactionTotalResponse, TransformedData, TransformedDataForCategory } from "pages/home/Home/store/HomeTypes";
+
 export const formatDate = (dateString: string): string => {
     const date = new Date(dateString);
     const day = date.getDate();
@@ -24,16 +26,31 @@ const getDaySuffix = (day: number): string => {
     }
 };
 
-export const formatCurrency = (amount: number): string => {
-    const currency = localStorage.getItem('currency') ?? 'INR';
+export const formatCurrency = (amount: number, currency: string): string => {
+    const roundedAmount = Math.round(amount);
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: currency,
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
-    }).format(amount);
+    }).format(roundedAmount);
 };
   
 export const capitalizeFirstLetter = (string: string): string => {
     return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
 };
+
+
+export const transformData = (transactionTotal:TransactionTotalResponse): TransformedData[] => {
+    return Object.keys(transactionTotal).map((key) => ({
+        transaction_type: capitalizeFirstLetter(key),
+        amount: transactionTotal[key as keyof TransactionTotalResponse]
+    }));
+}
+
+export const transformDataForTransactions = (data: { [category: string]: number }): TransformedData[] => {
+    return Object.entries(data).map(([category, amount]) => ({
+        transaction_type: category,
+        amount
+    }));
+}

@@ -42,7 +42,7 @@ td {
     /* padding:35px; */
 }
 .ant-table-wrapper {
-    padding:40px;
+    padding:50px;
     height: auto !important;
     overflow: auto; 
 }
@@ -98,7 +98,7 @@ td {
 
 .ant-select,
 #recurringExpenseForm_amount {
-    width: 400px !important;
+    width: 240px !important;
     height: 38px !important;
 }
 
@@ -220,4 +220,7 @@ td {
     font-weight: 700;
     border-radius: 3px;
     transform: rotate(-45deg);
+  }
+.currency-dropdown-recurring-expense .ant-select-selector{
+    width:84px !important;
   }

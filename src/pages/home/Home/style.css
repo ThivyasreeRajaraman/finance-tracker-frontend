@@ -29,7 +29,101 @@
 
 .main-title {
     padding-top: 30px;
-    padding-left: 450px;
+    padding-left: 40px;
     font-weight: 700;
     font-size: 36px;
+    margin-bottom: 50px !important;
+}
+
+.chart-title {
+    text-align: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.chart-row {
+    margin-top: 90px;
+}
+
+.chart-row {
+    margin-left: 180px;
+    height: auto;
+    overflow: auto;
+}
+
+.chart-column {
+    margin-right: 100px;
+}
+
+.pie-chart {
+    margin-top: 10px;
+}
+
+.gap-row {
+    margin-bottom: 1000px;
+}
+
+.month-dropdown {
+    margin-left: 440px;
+}
+
+.year-dropdown {
+    margin-left: -290px !important;
+}
+
+/* .month-dropdown .ant-select-selector,
+.year-dropdown .ant-select-selector {
+    width: 80px !important;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-right: 20px;
+}
+
+.ant-select-arrow {
+    right: 8px; 
+} */
+
+/* .ant-select-selector{
+    width: 80px !important;
+} */
+
+.month-dropdown .ant-select-selector,
+.year-dropdown .ant-select-selector {
+    width: 80px !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-right: 20px;
+    position: relative; 
+} 
+.month-dropdown .ant-select-arrow svg,
+.year-dropdown .ant-select-arrow svg {
+    fill: transparent;
+}
+
+.ant-select-selection-item-content {
+  text-align: center !important;
+}
+
+.filter-button {
+    margin-left: -290px !important;
+    color: #fff;
+    background: #37b4af !important;
+    border: none;
+    cursor: pointer;
+    font-weight:600 !important;
+    width: 70px;
+    height: 40px !important;
+    font-size: 15px !important;
+    border-radius: 5px;
+    
+}
+
+.filter-button:hover {
+    background-color: #34A7A3 !important;
+    cursor: pointer;
+    opacity: 1 !important;
+    color:white !important;
 }

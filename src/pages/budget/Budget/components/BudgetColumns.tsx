@@ -28,14 +28,22 @@ const columns = (handleEdit: (record: Budget) => void, handleDelete: (record: Bu
         dataIndex: 'amount',
         key: 'amount',
         className: 'table-content-centered',
-        render: (amount: number) => formatCurrency(amount),
+        render: (amount: number, record: Budget) => (
+            <>
+                {formatCurrency(amount, record.currency)}
+            </>
+        ),
     },
     {
         title: 'Threshold',
         dataIndex: 'threshold',
         key: 'threshold',
         className: 'table-content-centered',
-        render: (threshold: number) => formatCurrency(threshold),
+        render: (threshold: number, record: Budget) => (
+            <>
+                {formatCurrency(threshold, record.currency)}
+            </>
+        ),
     },
     {
         title: '',

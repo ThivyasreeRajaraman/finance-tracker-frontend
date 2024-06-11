@@ -8,7 +8,7 @@ export interface LendBorrowFilters {
 }
 
 export const formState = atom<CreateLendBorrowFormType>({
-  key: 'formState',
+  key: 'lendOrBorrowFormState',
   default: {
     transaction_partner: '',
     amount: null,
