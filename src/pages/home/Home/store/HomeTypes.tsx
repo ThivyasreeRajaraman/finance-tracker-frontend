@@ -32,3 +32,16 @@ export type TransformedDataForCategory = {
   category: string;
   amount: number;
 }
+
+export type NotificationType = {
+  actionDone: boolean;
+}
+
+export type ButtonClick = {
+  clicked: boolean;
+}
+
+export type ChartFilterParamsType = {
+  month: number;
+  year:number;
+}

@@ -26,14 +26,14 @@ const getDaySuffix = (day: number): string => {
     }
 };
 
-export const formatCurrency = (amount: number): string => {
-    const currency = localStorage.getItem('currency') ?? 'INR';
+export const formatCurrency = (amount: number, currency: string): string => {
+    const roundedAmount = Math.round(amount);
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: currency,
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
-    }).format(amount);
+    }).format(roundedAmount);
 };
   
 export const capitalizeFirstLetter = (string: string): string => {
