@@ -14,6 +14,7 @@ export const formState = atom<CreateBudgetFormType>({
         category_name: undefined,
         amount: null,
         threshold: null,
+        currency:localStorage.getItem('currency') || '',
       }
     ]
   }
@@ -45,6 +46,7 @@ export const CreateBudgetPayloadAtom = atom<CreateBudgetPayloadType>({
         category_name: '',
         amount: null,
         threshold: null,
+        currency:localStorage.getItem('currency') || '',
       }
     ]
   }

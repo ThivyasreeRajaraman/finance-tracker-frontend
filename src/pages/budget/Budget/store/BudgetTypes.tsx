@@ -7,6 +7,7 @@ export type CreateBudgetFormType = {
         category_name?: string;
         amount: number | null;
         threshold: number | null;
+        currency:string;
     }[];
 };
 
@@ -15,6 +16,7 @@ export type CreateBudgetPayloadType = {
         category_name?: string;
         amount: number | null;
         threshold: number | null;
+        currency:string;
     }[];
 };
 
