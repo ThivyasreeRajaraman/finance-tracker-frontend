@@ -28,7 +28,11 @@ const IncomeOrExpenseColumns = (handleEdit: (record: TransactionResponsePayloadT
         dataIndex: 'amount',
         key: 'amount',
         className: 'table-content-centered',
-        render: (amount: number) => formatCurrency(amount),
+        render: (amount: number, record: TransactionResponsePayloadType) => (
+            <>
+                {formatCurrency(amount, record.currency)}
+            </>
+        ),
     },
     {
         title: '',

@@ -94,8 +94,13 @@ td {
 
 .ant-select,
 #incomeOrExpenseForm_amount {
-    width: 400px !important;
+    width: 387px !important;
     height: 38px !important;
+}
+
+#incomeOrExpenseForm_amount{
+  width: 300px !important;
+  margin-right: 40px !important;
 }
 
 #incomeOrExpenseForm_custom_category {
@@ -226,9 +231,13 @@ td {
 }
 
 .total-amount.expense {
-    color: red;
+    color: #f94949;
 }
 
 .total-amount.income {
-    color: green;
+    color: #34cc65;
+}
+
+.currency-dropdown {
+  width:70px !important;
 }

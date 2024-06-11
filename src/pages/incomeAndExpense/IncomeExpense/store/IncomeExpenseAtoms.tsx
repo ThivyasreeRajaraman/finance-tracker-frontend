@@ -1,15 +1,6 @@
 import { atom } from 'recoil';
 import { IncomeOrExpenseFilters, CreateIncomeOrExpenseFormType, TransactionResponsePayloadType, TransactionType } from './IncomeExpenseTypes';
 
-export const IncomeExpenseFormState = atom<CreateIncomeOrExpenseFormType>({
-  key: 'incomeExpenseFormState',
-  default: {
-    transaction_type: undefined,
-    category_name: undefined,
-    amount: null,
-  }
-});
-
 export const IncomeExpenseFiltersAtom = atom<IncomeOrExpenseFilters>({
   key: 'incomeOrExpenseFilters',
   default: {
@@ -29,6 +20,7 @@ export const CreateIncomeOrExpensePayloadAtom = atom<CreateIncomeOrExpenseFormTy
       category_name: undefined,
       amount: null,
       transaction_type: undefined,
+      currency: 'INR',
     }
 });
 
@@ -38,6 +30,7 @@ export const incomeExpenseFormState = atom<CreateIncomeOrExpenseFormType>({
       category_name: undefined,
       amount: null,
       transaction_type: undefined,
+      currency: localStorage.getItem('currency') ?? 'INR',
     }
 })
   

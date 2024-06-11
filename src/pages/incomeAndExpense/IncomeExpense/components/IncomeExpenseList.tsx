@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useRecoilState, useRecoilValue, useRecoilValueLoadable } from 'recoil';
-import { Card, Table, message } from 'antd';
+import { Card, Table, message, Spin } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { IncomeOrExpenseListAtom, IncomeExpenseFiltersAtom, CreateIncomeOrExpensePayloadAtom, TransactionTypeAtom } from '../store/IncomeExpenseAtoms';
 import { createOrUpdateIncomeOrExpense, getIncomeOrExpenses } from '../store/IncomeExpenseSelectors';
@@ -34,7 +34,7 @@ const IncomeOrExpenseList = ({ onEdit, onDelete, transactionType }: IncomeOrExpe
 
     const loadable = useRecoilValueLoadable(getIncomeOrExpenses);
     const { data, page, limit, totalCount } = loadable.contents;
-    console.log("data:", data)
+    console.log("incexpdata:", data)
 
     useEffect(() => {
         console.log("loadable::")
@@ -78,13 +78,14 @@ const IncomeOrExpenseList = ({ onEdit, onDelete, transactionType }: IncomeOrExpe
     };
 
     const totalValue = transactionTotal?.[transactionType.toLowerCase()];
+    const currencyCode = localStorage.getItem('currency') ?? 'INR'; // Default value if currency code is not available
 
     return (
         <>
             <Card className='total-expense-card'>
                 <h3>Total {transactionType}</h3>
                 <p className={`total-amount ${transactionType.toLowerCase()}`}>
-                    {totalValue !== undefined ? `${formatCurrency(totalValue)}` : 'Loading...'}
+                    {totalValue !== undefined ? `${formatCurrency(totalValue, currencyCode)}` : <Spin/>}
                 </p>
             </Card>
 

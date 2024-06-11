@@ -9,6 +9,7 @@ export type CreateIncomeOrExpenseFormType = {
     transaction_type: string | undefined;
     category_name?: string;
     amount: number | null;
+    currency: string;
 };
 
 export interface IncomeOrExpenseFilters {
@@ -23,7 +24,9 @@ export type TransactionResponsePayloadType = {
     category_name: string | undefined;
     amount: number | null;
     transaction_partner: string | undefined;
-    payment_due_date: string | undefined
+    payment_due_date: string | undefined;
+    currency: string;
+    active: boolean
 }
 
 export type TransactionType = {

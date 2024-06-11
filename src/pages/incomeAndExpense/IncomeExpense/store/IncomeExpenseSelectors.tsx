@@ -89,14 +89,14 @@ export const getIncomeOrExpenses = selector<{
                 perPageCount: filters.limit || 10,
             },
         });
-        console.log("dataa::", response.data)
+        console.log("respdataa::", response.data)
 
         const selectedData = response.data.data.map((item: any) => ({
             id: item.ID,
             createdAt: item.CreatedAt,
             category: item.Category?.name,
             amount: item.amount,
-            nextExpenseDate: item.next_expense_date,
+            currency: item.currency,
         }));
         return {
             data: selectedData,
