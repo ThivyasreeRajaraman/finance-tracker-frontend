@@ -62,8 +62,8 @@ const LendBorrowList: React.FC<LendBorrowListProps> = ({ onEdit, onDelete }) => 
 
     return (
         <>
-            <Select<'all' | 'lend' | 'borrow'> placeholder="Transaction type filter" style={{ width: 200 , marginBottom: 16 }} onChange={handleFilterChange}>
-                <Option value="all">All Transactions</Option>
+            <Select<'all' | 'lend' | 'borrow'>  className='lendBorrowFilter'placeholder="Transaction type filter"  allowClear  onChange={handleFilterChange}>
+                
                 <Option value="lend">Lend</Option>
                 <Option value="borrow">Borrow</Option>
             </Select>

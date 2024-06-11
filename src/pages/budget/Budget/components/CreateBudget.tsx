@@ -59,7 +59,6 @@ CreateBudgetModal = () => {
                     amount: null,
                     threshold: null,
                     currency:localStorage.getItem('currency') || '',
-                    
                 }]
             });
         }
@@ -147,7 +146,7 @@ CreateBudgetModal = () => {
                     <>
                         {fields.map(({ key, name, ...restField }) => (
                             <div key={key}>
-                                <Row justify="space-between">
+                                <Row gutter={[0, 5]}>
                                     <Col>
                                     
                                 <Item
