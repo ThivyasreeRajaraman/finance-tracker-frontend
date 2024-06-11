@@ -34,6 +34,7 @@ export const getBudgets = selector<{
       category: item.Category?.name,
       amount: item.amount,
       threshold: item.threshold,
+      currency: item.currency,
     }));
     console.log("data::", selectedData)
     console.log("data::", response.data)

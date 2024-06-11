@@ -27,5 +27,6 @@ export interface Budget {
     threshold:number;
     createdAt: string;
     updatedAt: string;
+    currency: string;
   }
   
