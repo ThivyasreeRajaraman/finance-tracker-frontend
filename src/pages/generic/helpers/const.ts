@@ -1,4 +1,5 @@
 export const FORM_RULE = 'This field is required!';
+export const INPUT_AMOUNT_RULE = 'Enter a valid amount!';
 
 export const FREQUENCY_OPTIONS = [
     { value: 'WEEKLY', label: 'WEEKLY' },

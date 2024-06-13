@@ -26,13 +26,22 @@
     margin-right: 20px !important;
 }
 
-.back-button:hover,
+
 .custom-button:hover {
   border: none;
-  background-color: transparent;
+  background-color: #34A7A3 !important;
   cursor: pointer;
   color:white !important;
 }
+
+.back-button:hover {
+  border: none;
+}
+
+.back-button {
+  border: none;
+}
+
 .header h1 {
   margin-left: 0 !important;
   font-weight: 600;

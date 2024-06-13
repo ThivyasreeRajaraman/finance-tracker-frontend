@@ -1,6 +1,6 @@
 /* style.css */
 .profile-page {
-  background-color: #f0f0f0; /* Light ash background color */
+  /* background-color: #f0f0f0;  */
   padding: 60px;
   display: flex;
   
@@ -21,10 +21,19 @@
   font-size: 0.9em; /* Increase the font size of the Text component */
 }
 
-.profile-value {
+.profile-value1,
+.profile-value2,
+.profile-value3 {
   margin-left: 10px;
   font-weight: normal;
 }
+
+.ant-input.css-dev-only-do-not-override-3rel02.ant-input-outlined.profile-value {
+  margin-left: 92px; 
+  /* width: 200px; */
+  margin-right: 50px;
+}
+
 
 .profile-item {
   display: flex;
@@ -70,4 +79,9 @@ label {
 }
 #ProfileForm .css-dev-only-do-not-override-3rel02 .ant-picker-panel {
   width: 400px !important; 
+}
+
+.profile-label {
+  width: 180px !important;
+  /* margin-right: 100px; */
 }
