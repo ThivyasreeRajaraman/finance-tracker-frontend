@@ -1,11 +1,11 @@
-import { DatePicker, Button, Form, Input, message, Select, Space, Row, Col, Card } from 'antd';
+import { DatePicker, Button, Form, Input, InputNumber, Select, Space, Row, Col, Card } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
 import { useEffect, useState } from 'react';
 import { useRecoilValueLoadable, useRecoilState, useRecoilCallback, useRecoilValue } from 'recoil';
 import { useNavigate } from 'react-router-dom';
 import { getLoadableStateAndContents } from 'pages/generic/helpers/LoadableHelper';
 import GenericButton from 'pages/generic/components/Button/Button';
-import { FORM_RULE } from 'pages/generic/helpers/const';
+import { FORM_RULE, INPUT_AMOUNT_RULE } from 'pages/generic/helpers/const';
 import { useParams } from 'react-router-dom';
 import { Spin } from 'antd';
 import { fetchIncomeorExpenseCategoriesSelector } from '../store/IncomeExpenseSelectors';
@@ -87,6 +87,7 @@ const CreateIncomeOrExpense = ({ transactionType }: CreateIncomeOrExpenseProps) 
             category_name: isCustomCategory ? customCategory : values.category_name,
             currency: values.currency,
         };
+        console.log("updt in submit::",updatedIncomeOrExpenseValues)
         setIncomeExpensePayload(updatedIncomeOrExpenseValues)
     };
 
@@ -144,12 +145,17 @@ const CreateIncomeOrExpense = ({ transactionType }: CreateIncomeOrExpenseProps) 
                     </Row>
                     <Row justify="space-between">
                         <Col span={18}>
-                            <Form.Item
+                        <Form.Item
                                 label="Amount"
                                 name="amount"
-                                rules={[{ required: true, message: FORM_RULE }]}
+                                rules={[{ required: true, message: INPUT_AMOUNT_RULE },
+                                    { type: 'number', min: 1, message: 'Amount must be greater than 0.' }
+                                ]}
+                                validateTrigger="onBlur" 
                             >
-                                <Input type="text" placeholder='Enter amount' />
+                                <InputNumber
+                                    placeholder='Enter amount'
+                                />
                             </Form.Item>
                         </Col>
                         <Col span={5}>

@@ -1,14 +1,14 @@
-import { DatePicker, Button, Form, Input, message, Select, Space, Row, Col } from 'antd';
+import { DatePicker, Button, Form, Input, message, Select, Space, Row, Col, Card, InputNumber } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
 import { useEffect, useState } from 'react';
-import { fetchPartnersSelector,createOrUpdateLendBorrow,lendBorrowDataSelector } from '../store/LendBorrowSelectors';
+import { fetchPartnersSelector, createOrUpdateLendBorrow, lendBorrowDataSelector } from '../store/LendBorrowSelectors';
 import { useRecoilValueLoadable, useRecoilState, useRecoilCallback, useRecoilValue } from 'recoil';
 import { useNavigate } from 'react-router-dom';
-import { transactionIdState,formState,CreateLendBorrowPayloadAtom } from '../store/LendBorrowAtoms';
+import { transactionIdState, formState, CreateLendBorrowPayloadAtom } from '../store/LendBorrowAtoms';
 import { getLoadableStateAndContents } from 'pages/generic/helpers/LoadableHelper';
 import GenericButton from 'pages/generic/components/Button/Button';
-import { FORM_RULE, TRANSACTION_OPTIONS } from 'pages/generic/helpers/const';
-import { CreateLendBorrowFormType,CreateLendBorrowPayloadType } from '../store/LendBorrowTypes';
+import { FORM_RULE, TRANSACTION_OPTIONS, INPUT_AMOUNT_RULE } from 'pages/generic/helpers/const';
+import { CreateLendBorrowFormType, CreateLendBorrowPayloadType } from '../store/LendBorrowTypes';
 import { useParams } from 'react-router-dom';
 import { fetchCurrenciesSelector } from 'pages/home/Home/store/CurrencySelectors';
 
@@ -21,7 +21,7 @@ const CreateLendBorrowModal = () => {
     const [transactionIdFromState, setTransactionIdState] = useRecoilState(transactionIdState);
     const [LendBorrowPayload, setLendBorrowPayload] = useRecoilState(CreateLendBorrowPayloadAtom);
     const partnersLoadable = useRecoilValueLoadable(fetchPartnersSelector);
-    const currenciesLoadable =useRecoilValueLoadable(fetchCurrenciesSelector)
+    const currenciesLoadable = useRecoilValueLoadable(fetchCurrenciesSelector)
     const lendBorrowDataLoadable = useRecoilValueLoadable(lendBorrowDataSelector);
     const createOrUpdateLendBorrowLoadable = useRecoilValueLoadable(createOrUpdateLendBorrow);
     const [CreateLendBorrowForm] = useForm<CreateLendBorrowFormType>();
@@ -36,9 +36,9 @@ const CreateLendBorrowModal = () => {
 
     useEffect(() => {
         if (createOrUpdateLendBorrowLoadable.state === 'hasValue' && createOrUpdateLendBorrowLoadable.contents != undefined) {
-            console.log("inside hook:",createOrUpdateLendBorrowLoadable)
+            console.log("inside hook:", createOrUpdateLendBorrowLoadable)
             const response = createOrUpdateLendBorrowLoadable.contents;
-            console.log("response in useeffect::",response)             
+            console.log("response in useeffect::", response)
             message.success(response?.message);
             navigate('/transaction');
         } else if (createOrUpdateLendBorrowLoadable.state === 'hasError') {
@@ -59,14 +59,14 @@ const CreateLendBorrowModal = () => {
             amountString = parseFloat(values.amount.toString());
         }
 
-        console.log("partner",values.transaction_partner)
+        console.log("partner", values.transaction_partner)
 
         const updatedLendBorrowValues: CreateLendBorrowPayloadType = {
-            transaction_partner: isNewPartner? newPartner: values.transaction_partner,
+            transaction_partner: isNewPartner ? newPartner : values.transaction_partner,
             amount: amountString,
             transaction_type: values.transaction_type,
             payment_due_date: isoDateString,
-            currency:values.currency,
+            currency: values.currency,
         };
         setLendBorrowPayload(updatedLendBorrowValues)
     };
@@ -78,104 +78,125 @@ const CreateLendBorrowModal = () => {
     };
     return (
         <>
-            <Form
-                layout="vertical"
-                name="lendBorrowForm"
-                form={CreateLendBorrowForm}
-                onFinish={handleSubmit}
-                validateTrigger="onBlur"
-                initialValues={formValues}
-            >
-
-                <Form.Item
-                    label="Partner"
-                    name="transaction_partner"
-                    rules={[{ required: true, message: FORM_RULE }]}
+            <Card className='lend-borrow-card'>
+                <Form
+                    layout="vertical"
+                    name="lendBorrowForm"
+                    form={CreateLendBorrowForm}
+                    onFinish={handleSubmit}
+                    validateTrigger="onBlur"
+                    initialValues={formValues}
                 >
-                    <Select placeholder="Select Partner" allowClear showSearch onChange={handlePartnerChange}>
-                    {Array.isArray(partners) && partners.length > 0 ? (
-                        partners?.map((partner: string, index: number) => (
-                            <Option key={index} value={partner}>
-                                {partner}
-                            </Option>
-                        ))
-                    ) : (
-                        <Option value="" disabled>
-                            Select Partner
-                        </Option>
-                    )}
-                    <Option value="Others">New Partner</Option>
-                    </Select>
-                </Form.Item>
-                {isNewPartner && (
-                            <Form.Item
-                                label="New Partner"
-                                name="new_partner"
+                    <Row>
+                        <Col span={12}>
+                            <Item
+                                label="Partner"
+                                name="transaction_partner"
                                 rules={[{ required: true, message: FORM_RULE }]}
                             >
-                                <Input placeholder='Enter partner name' value={newPartner} onChange={(e) => setNewPartner(e.target.value)} />
-                            </Form.Item>
-                        )}
+                                <Select placeholder="Select Partner" allowClear showSearch onChange={handlePartnerChange}>
+                                    {Array.isArray(partners) && partners.length > 0 ? (
+                                        partners?.map((partner: string, index: number) => (
+                                            <Option key={index} value={partner}>
+                                                {partner}
+                                            </Option>
+                                        ))
+                                    ) : (
+                                        <Option value="" disabled>
+                                            Select Partner
+                                        </Option>
+                                    )}
+                                    <Option value="Others">New Partner</Option>
+                                </Select>
+                            </Item>
+                            {isNewPartner && (
+                                <Form.Item
+                                    label="New Partner"
+                                    name="new_partner"
+                                    rules={[{ required: true, message: FORM_RULE }]}
+                                >
+                                    <Input placeholder='Enter partner name' value={newPartner} onChange={(e) => setNewPartner(e.target.value)} />
+                                </Form.Item>
+                            )}
+                        </Col>
+                        <Col span={9}>
+                        <Item
+                                label="Amount"
+                                name="amount"
+                                rules={[{ required: true, message: INPUT_AMOUNT_RULE },
+                                    { type: 'number', min: 1, message: 'Amount must be greater than 0.' }
+                                ]}
+                                validateTrigger="onBlur" 
+                            >
+                                <InputNumber
+                                    placeholder='Enter amount'
+                                />
+                            </Item>
+                        </Col>
+                        <Col span={3}>
+                            <Item
+                                label="Currency"
+                                name="currency"
+                                rules={[{ required: true, message: FORM_RULE }]}
+                            >
+                                <Select placeholder="Select Currency" defaultValue={localStorage.getItem('currency')} disabled={false} allowClear showSearch className='currency-dropdown'>
+                                    {currenciesLoadable.state === 'loading' && <Option value="">Loading...</Option>}
+                                    {currenciesLoadable.state === 'hasError' && <Option value="">Error loading currencies</Option>}
+                                    {currenciesLoadable.state === 'hasValue' &&
+                                        currenciesLoadable.contents.map((currency: string, index: number) => (
+                                            <Option key={index} value={currency}>
+                                                {currency}
+                                            </Option>
+                                        ))}
+                                </Select>
+                            </Item>
+                        </Col>
+                    </Row>
 
-                <Form.Item
-                    label="Amount"
-                    name="amount"
-                    rules={[{ required: true, message: FORM_RULE }]}
-                >
-                    <Input type="text" placeholder='Enter amount' />
-                </Form.Item>
-                <Form.Item
-                    label="Currency"
-                    name="currency"
-                    rules={[{ required: true, message: FORM_RULE }]}
-                >
-                    <Select placeholder="Select Currency" defaultValue={localStorage.getItem('currency')} disabled={false} allowClear showSearch className='currency-dropdown'>
-                        {currenciesLoadable.state === 'loading' && <Option value="">Loading...</Option>}
-                        {currenciesLoadable.state === 'hasError' && <Option value="">Error loading currencies</Option>}
-                        {currenciesLoadable.state === 'hasValue' &&
-                            currenciesLoadable.contents.map((currency: string, index: number) => (
-                                <Option key={index} value={currency}>
-                                    {currency}
-                                </Option>
-                            ))}
-                    </Select>
-                </Form.Item>
 
-                <Item
-                    label="Transaction Type"
-                    name="transaction_type"
-                    rules={[{ required: true, message: FORM_RULE }]}
-                >
-                    <Select placeholder="Select Transaction Type" allowClear showSearch>
-                        {TRANSACTION_OPTIONS.map(option => (
-                            <Option key={option.value} value={option.value}>
-                                {option.label}
-                            </Option>
-                        ))}
-                    </Select>
-                </Item>
+                    <Row>
+                        <Col>
+                            <Item
+                                label="Transaction Type"
+                                name="transaction_type"
+                                rules={[{ required: true, message: FORM_RULE }]}
+                            >
+                                <Select placeholder="Select Transaction Type" allowClear showSearch>
+                                    {TRANSACTION_OPTIONS.map(option => (
+                                        <Option key={option.value} value={option.value}>
+                                            {option.label}
+                                        </Option>
+                                    ))}
+                                </Select>
+                            </Item>
+                        </Col>
 
-                <Form.Item
-                    label="Payment Due Date"
-                    name="payment_due_date"
-                    rules={[{ required: true, message: FORM_RULE }]}
-                >
-                    <DatePicker
-                        format="YYYY-MM-DD"
-                    />
-                </Form.Item>
+                        <Col>
+                            <Item
+                                label="Payment Due Date"
+                                name="payment_due_date"
+                                rules={[{ required: true, message: FORM_RULE }]}
+                            >
+                                <DatePicker
+                                    format="YYYY-MM-DD"
+                                />
+                            </Item>
+                        </Col>
+                    </Row>
 
-                <Row className='button-row'>
-                    <Col>
-                        <Item wrapperCol={{ offset: 0 }}>
-                            <Space>
-                            <Button className='reset-button' onClick={handleReset}>Reset</Button>
+                    <Row className='button-row-lend-borrow'>
+                        <Col>
+                            <Item wrapperCol={{ offset: 0 }}>
+                                <Space>
+                                    <Button className='reset-button' onClick={handleReset}>Reset</Button>
                                     <GenericButton text="Create" />
-                            </Space>
-                        </Item>
-                    </Col>
-                </Row>
-            </Form>
+                                </Space>
+                            </Item>
+                        </Col>
+                    </Row>
+                </Form>
+            </Card>
+
 
         </>
     );

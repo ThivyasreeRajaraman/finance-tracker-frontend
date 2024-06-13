@@ -6,8 +6,6 @@ import { getLendBorrow,createOrUpdateLendBorrow } from '../store/LendBorrowSelec
 import { LendBorrowFiltersAtom,LendBorrowAtom,CreateLendBorrowPayloadAtom } from '../store/LendBorrowAtoms';
 import columns from './LendBorrowColumns';
 import { LendBorrow } from '../store/LendBorrowTypes';
-import apiClient from 'pages/generic/apiUtils/client';
-import { DataResponseType } from 'pages/generic/apiUtils/apiTypes';
 import './style.css';
 
 const { Option } = Select;
