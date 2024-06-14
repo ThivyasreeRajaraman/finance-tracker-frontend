@@ -1,33 +1,22 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useRecoilState, useRecoilValueLoadable, useSetRecoilState } from 'recoil';
-import { Table,Select, message } from 'antd';
-import { useNavigate } from 'react-router-dom';
-import { getLendBorrow,createOrUpdateLendBorrow } from '../store/LendBorrowSelectors';
+import { Table,Select } from 'antd';
+import { getLendBorrow,createLendBorrow } from '../store/LendBorrowSelectors';
 import { LendBorrowFiltersAtom,LendBorrowAtom,CreateLendBorrowPayloadAtom } from '../store/LendBorrowAtoms';
 import columns from './LendBorrowColumns';
-import { LendBorrow } from '../store/LendBorrowTypes';
-import apiClient from 'pages/generic/apiUtils/client';
-import { DataResponseType } from 'pages/generic/apiUtils/apiTypes';
 import './style.css';
 
 const { Option } = Select;
 
-interface LendBorrowListProps {
-    onEdit?: (lendBorrow: LendBorrow) => void;
-    onDelete?: (lendBorrow: LendBorrow) => void;
-}
 
-const LendBorrowList: React.FC<LendBorrowListProps> = ({ onEdit, onDelete }) => {
+
+const LendBorrowList: React.FC= () => {
    
     const [lendBorrow, setLendBorrow] = useRecoilState(LendBorrowAtom);
-    const navigate = useNavigate();
     const [lendBorrowData, setLendBorrowData] = useRecoilState(LendBorrowFiltersAtom);
-    const createOrUpdateLendBorrowLoadable = useRecoilValueLoadable(createOrUpdateLendBorrow);
+    const createLendBorrowLoadable = useRecoilValueLoadable(createLendBorrow);
     const [lendBorrowPayload, setLendBorrowPayload] = useRecoilState(CreateLendBorrowPayloadAtom);
     const [currPage, setCurrPage] = useState(1);
-    const [filter, setFilter] = useState<'all' | 'lend' | 'borrow'>('all');
-
-    
 
     console.log("step1")
     const loadable = useRecoilValueLoadable(getLendBorrow);
@@ -38,10 +27,7 @@ const LendBorrowList: React.FC<LendBorrowListProps> = ({ onEdit, onDelete }) => 
         if (loadable.state === 'hasValue') {
             setLendBorrow(data);
         }
-    }, [loadable, data, lendBorrowData, lendBorrowPayload,setLendBorrow, setLendBorrowPayload, createOrUpdateLendBorrowLoadable, CreateLendBorrowPayloadAtom]);
-
-
-    
+    }, [loadable, data, lendBorrowData, lendBorrowPayload,setLendBorrow, setLendBorrowPayload, createLendBorrowLoadable, CreateLendBorrowPayloadAtom]);
 
     const handlePageChange = useCallback((page: number) => {
         setCurrPage(page);
@@ -52,13 +38,13 @@ const LendBorrowList: React.FC<LendBorrowListProps> = ({ onEdit, onDelete }) => 
     }, [setLendBorrowData]);
 
 
-    const handleFilterChange = (value: 'all' | 'lend' | 'borrow') => {
+    const handleFilterChange = (value: 'all' | 'lend' | 'borrow'| undefined) => {
         setLendBorrowData((prevState) => ({
             ...prevState,
-            filter: value,
+            filter: value || 'all',
         }));
     };
-    
+
 
     return (
         <>

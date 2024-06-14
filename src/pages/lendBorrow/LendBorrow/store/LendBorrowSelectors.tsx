@@ -3,7 +3,6 @@ import apiClient from '../../../generic/apiUtils/client';
 import { LendBorrowFiltersAtom,CreateLendBorrowPayloadAtom,transactionIdState } from './LendBorrowAtoms';
 import { DataResponseType,DataResponseForExistingEntry } from '../../../generic/apiUtils/apiTypes';
 import { HandleErrorResponse } from 'pages/generic/apiUtils/apiErrorHandling';
-import { mapLendBorrowDataToFormType } from './helpers';
 
 
 export const getLendBorrow = selector<{
@@ -20,7 +19,7 @@ export const getLendBorrow = selector<{
     const api = apiClient(token);
 
     const filters = get(LendBorrowFiltersAtom);
-    const response = await api.get('api/user/transactionpartner', {
+    const response = await api.get(`api/user/transactionpartner/${filters.filter}`, {
       params: {
         pageNumber: filters.page,
         perPageCount: filters.limit || 10,
@@ -37,15 +36,9 @@ export const getLendBorrow = selector<{
       transactionType:item.closing_balance < 0 ? "Lend" : "Borrow",
     }));
     console.log("selcteddata::", selectedData)
-    const filteredData = selectedData.filter((item: any) => {
-      if (filters.filter === 'all') return true;
-      if (filters.filter === 'lend') return item.transactionType === 'Lend';
-      if (filters.filter === 'borrow') return item.transactionType === 'Borrow';
-      return true;
-    });
-    console.log("filteredData::",filteredData)
+    
     return {
-      data: filteredData,
+      data: selectedData,
       page: response.data.page,
       limit: response.data.limit,
       totalPages: response.data.totalPages,
@@ -61,9 +54,8 @@ export const fetchPartnersSelector = selector({
       const token = localStorage.getItem('token');
       const api = apiClient(token);
       const response = await api.get('api/user/transactionpartner');
-      const partnerNames = response.data.data.map((item: any) => item.partner_name);
-      console.log(partnerNames)
-      return partnerNames;
+      console.log("partners:",response.data.partners)
+      return response.data.partners;
     } catch (error) {
       console.error('Error fetching partners:', error);
       throw error;
@@ -76,23 +68,15 @@ export const createLendBorrowState = atom<any>({
   default: {},
 });
 
-export const createOrUpdateLendBorrow = selector({
-  key: 'CREATE_UPDATE_LEND_BORROW',
+export const createLendBorrow = selector({
+  key: 'CREATE_LEND_BORROW',
   get: async ({ get }) => {
     try {
       const lendBorrowPayload = get(CreateLendBorrowPayloadAtom);
-      const transactionId = get(transactionIdState);
       const token = localStorage.getItem('token');
-      let response
       console.log("transPayload::",lendBorrowPayload)
-      if (lendBorrowPayload.transaction_partner!='') {
-        if (transactionId) {
-          response = await apiClient(token).put<DataResponseForExistingEntry>(`api/user/transaction/${transactionId}`, lendBorrowPayload);
-          console.log("Response data1:", response.data);
-        } else {
-          response = await apiClient(token).post<DataResponseType>('api/user/transaction', lendBorrowPayload);
-          console.log("Response data2:", response.data);
-        }
+      if (lendBorrowPayload.transaction_partner!='') {       
+        const response = await apiClient(token).post<DataResponseType>('api/user/transaction', lendBorrowPayload);        
         console.log("response.data::",response.data)
         return response.data
       }
@@ -104,26 +88,4 @@ export const createOrUpdateLendBorrow = selector({
   },
 });
 
-
-
-export const lendBorrowDataSelector = selector({
-  key: 'LEND_BORROW_DATA',
-  get: async ({ get }) => {
-    const transactionId = get(transactionIdState);
-    if (!transactionId) return null;
-
-    try {
-      const token = localStorage.getItem('token');
-      const response = await apiClient(token).get<DataResponseType>(`api/user/transaction/${transactionId}`);
-      const lendBorrowData = response.data;
-      console.log("fetch::", lendBorrowData);
-      console.log("valll:::", mapLendBorrowDataToFormType(lendBorrowData));
-      return mapLendBorrowDataToFormType(lendBorrowData);
-    } catch (error) {
-      console.error('Error fetching transaction data:', error);
-      HandleErrorResponse(error);
-      return null;
-    }
-  },
-});
 

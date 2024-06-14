@@ -1,7 +1,7 @@
-import { DatePicker, Button, Form, Input, message, Select, Space, Row, Col, Card } from 'antd';
+import { Button, Form, Input, Select,Divider, Space, Row, Col, Card,InputRef } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
-import { useEffect, useState } from 'react';
-import { useRecoilValueLoadable, useRecoilState, useRecoilCallback, useRecoilValue } from 'recoil';
+import { useEffect, useState,useRef } from 'react';
+import { useRecoilValueLoadable, useRecoilState,useRecoilValue } from 'recoil';
 import { useNavigate } from 'react-router-dom';
 import { getLoadableStateAndContents } from 'pages/generic/helpers/LoadableHelper';
 import GenericButton from 'pages/generic/components/Button/Button';
@@ -14,7 +14,7 @@ import { CreateIncomeOrExpenseFormType } from '../store/IncomeExpenseTypes';
 import { transactionIdState, CreateIncomeOrExpensePayloadAtom, incomeExpenseFormState, TransactionTypeAtom } from '../store/IncomeExpenseAtoms';
 import { IncomeExpenseFiltersAtom, IncomeOrExpenseResponseAtom } from '../store/IncomeExpenseAtoms';
 import { fetchCurrenciesSelector } from 'pages/home/Home/store/CurrencySelectors';
-import { formToJSON } from 'axios';
+import { PlusOutlined } from '@ant-design/icons';
 
 const { Option } = Select;
 const { Item } = Form;
@@ -37,12 +37,13 @@ const CreateIncomeOrExpense = ({ transactionType }: CreateIncomeOrExpenseProps) 
     const createOrUpdateIncomeOrExpenseLoadable = useRecoilValueLoadable(createOrUpdateIncomeOrExpense);
     const [incomeOrExpensesData, setIncomeOrExpensesData] = useRecoilState(IncomeExpenseFiltersAtom);
     const currenciesLoadable = useRecoilValueLoadable(fetchCurrenciesSelector);
+    const inputRef = useRef<InputRef>(null);
     console.log("currency::", currenciesLoadable)
 
     const { loading: categoriesLoading, error: categoriesError, data: categories } = getLoadableStateAndContents(categoriesLoadable);
     const { loading: incomeExpenseDataLoading, error: incomeExpenseDataError, data: incomeExpenseData } = getLoadableStateAndContents(incomeExpenseDataLoadable);
 
-    const [isCustomCategory, setIsCustomCategory] = useState(false);
+    const [category, setCategory] = useState<string[]>([]);
     const [customCategory, setCustomCategory] = useState('');
 
     useEffect(() => {
@@ -50,6 +51,12 @@ const CreateIncomeOrExpense = ({ transactionType }: CreateIncomeOrExpenseProps) 
             setTransactionIdState(transactionId);
         }
     }, [transactionId, transactionTypeState]);
+
+    useEffect(() => {
+        if (categoriesLoadable.state === 'hasValue' && categoriesLoadable.contents) {
+          setCategory(categoriesLoadable.contents);
+        }
+      }, [categoriesLoadable]);
 
     useEffect(() => {
         setTransactionType({ transactionType });
@@ -71,8 +78,8 @@ const CreateIncomeOrExpense = ({ transactionType }: CreateIncomeOrExpenseProps) 
         navigate(`/${transactionType.toLowerCase()}`);
     }
 
-    const handleCategoryChange = (value: string) => {
-        setIsCustomCategory(value === "Others");
+    const handleCategoryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setCustomCategory(event.target.value);
     };
 
     const handleSubmit = async (values: CreateIncomeOrExpenseFormType) => {
@@ -84,15 +91,23 @@ const CreateIncomeOrExpense = ({ transactionType }: CreateIncomeOrExpenseProps) 
         const updatedIncomeOrExpenseValues: CreateIncomeOrExpenseFormType = {
             transaction_type: transactionType.toLowerCase(),
             amount: amountString,
-            category_name: isCustomCategory ? customCategory : values.category_name,
+            category_name: values.category_name,
             currency: values.currency,
         };
         setIncomeExpensePayload(updatedIncomeOrExpenseValues)
     };
 
+    const addCustomCategory = (e: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>) => {
+        e.preventDefault();
+        setCategory([...category, customCategory]);
+        setCustomCategory('');
+        setTimeout(() => {
+          inputRef.current?.focus();
+        }, 0);
+      };
+
     const handleReset = () => {
         CreateIncomeOrExpenseForm.resetFields();
-        setIsCustomCategory(false);
         setCustomCategory('');
     };
 
@@ -116,31 +131,39 @@ const CreateIncomeOrExpense = ({ transactionType }: CreateIncomeOrExpenseProps) 
                             label="Category"
                             name="category_name"
                             rules={[{ required: true, message: FORM_RULE }]}
-                        >
-                            <Select placeholder="Select Category" allowClear showSearch onChange={handleCategoryChange}>
-                                {Array.isArray(categories) && categories.length > 0 ? (
-                                    categories.map((category: string, index: number) => (
-                                        <Option key={index} value={category}>
-                                            {category}
-                                        </Option>
-                                    ))
-                                ) : (
-                                    <Option value="" disabled>
-                                        No categories available
-                                    </Option>
-                                )}
-                                <Option value="Others">Others</Option>
-                            </Select>
-                        </Form.Item>
-                        {isCustomCategory && (
-                            <Form.Item
-                                label="Custom Category"
-                                name="custom_category"
-                                rules={[{ required: true, message: FORM_RULE }]}
                             >
-                                <Input placeholder='Enter custom category' value={customCategory} onChange={(e) => setCustomCategory(e.target.value)} />
-                            </Form.Item>
-                        )}
+                                <Select
+                                placeholder='Select Category'
+                                showSearch
+                                dropdownRender={(menu) => (
+                                    <>
+                                    {menu}
+                                    <Divider style={{margin:'8px 0'}}/>
+                                    <Space style={{padding:'0 8px 4px'}}>  
+                                        <Input
+                                            placeholder='Category Name'
+                                            ref={inputRef}
+                                            value={customCategory}
+                                            onChange={handleCategoryChange}
+                                            onKeyDown={(e) => e.stopPropagation()}
+                                        />
+                                        <Button type="text" icon={<PlusOutlined />} onClick={addCustomCategory}>
+                                        Add Category
+                                        </Button>
+                                    </Space>
+                                    
+                                    </>
+                                )}
+                                >
+                                    {category.map((categoryValue, index) => (
+                                        <Option key={index} value={categoryValue}>
+                                        {categoryValue}
+                                        </Option>
+                                    ))}
+
+                                </Select>
+
+                        </Form.Item> 
                     </Row>
                     <Row justify="space-between">
                         <Col span={18}>

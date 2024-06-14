@@ -1,53 +1,54 @@
-import { DatePicker, Button, Form, Input, message, Select, Space, Row, Col } from 'antd';
+import { DatePicker, Button, Form, Input, message, Select, Space, Row, Col, Divider } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
-import { useEffect, useState } from 'react';
-import { fetchPartnersSelector,createOrUpdateLendBorrow,lendBorrowDataSelector } from '../store/LendBorrowSelectors';
-import { useRecoilValueLoadable, useRecoilState, useRecoilCallback, useRecoilValue } from 'recoil';
+import { useEffect, useState,useRef } from 'react';
+import { fetchPartnersSelector,createLendBorrow} from '../store/LendBorrowSelectors';
+import { useRecoilValueLoadable, useRecoilState, useRecoilValue } from 'recoil';
 import { useNavigate } from 'react-router-dom';
-import { transactionIdState,formState,CreateLendBorrowPayloadAtom } from '../store/LendBorrowAtoms';
-import { getLoadableStateAndContents } from 'pages/generic/helpers/LoadableHelper';
+import { formState,CreateLendBorrowPayloadAtom } from '../store/LendBorrowAtoms';
 import GenericButton from 'pages/generic/components/Button/Button';
 import { FORM_RULE, TRANSACTION_OPTIONS } from 'pages/generic/helpers/const';
 import { CreateLendBorrowFormType,CreateLendBorrowPayloadType } from '../store/LendBorrowTypes';
-import { useParams } from 'react-router-dom';
 import { fetchCurrenciesSelector } from 'pages/home/Home/store/CurrencySelectors';
+import { PlusOutlined } from '@ant-design/icons';
+import type { InputRef } from 'antd';
 
 const { Option } = Select;
 const { Item } = Form;
 
 const CreateLendBorrowModal = () => {
     const navigate = useNavigate();
-    const { transactionId } = useParams();
-    const [transactionIdFromState, setTransactionIdState] = useRecoilState(transactionIdState);
     const [LendBorrowPayload, setLendBorrowPayload] = useRecoilState(CreateLendBorrowPayloadAtom);
     const partnersLoadable = useRecoilValueLoadable(fetchPartnersSelector);
     const currenciesLoadable =useRecoilValueLoadable(fetchCurrenciesSelector)
-    const lendBorrowDataLoadable = useRecoilValueLoadable(lendBorrowDataSelector);
-    const createOrUpdateLendBorrowLoadable = useRecoilValueLoadable(createOrUpdateLendBorrow);
+    const createLendBorrowLoadable = useRecoilValueLoadable(createLendBorrow);
     const [CreateLendBorrowForm] = useForm<CreateLendBorrowFormType>();
     const formValues = useRecoilValue(formState);
+    const inputRef = useRef<InputRef>(null);
 
-    const [valuesToUpdate, setValuesToUpdate] = useState<CreateLendBorrowFormType | null>(null);
-    const [showModal, setShowModal] = useState(false);
-    const [isNewPartner, setIsNewPartner] = useState(false);
+    const [partners, setPartners] = useState<string[]>([]);
     const [newPartner, setNewPartner] = useState('');
 
-    const { loading: partnersLoading, error: partnersError, data: partners } = getLoadableStateAndContents(partnersLoadable);
 
     useEffect(() => {
-        if (createOrUpdateLendBorrowLoadable.state === 'hasValue' && createOrUpdateLendBorrowLoadable.contents != undefined) {
-            console.log("inside hook:",createOrUpdateLendBorrowLoadable)
-            const response = createOrUpdateLendBorrowLoadable.contents;
+        if (partnersLoadable.state === 'hasValue' && partnersLoadable.contents) {
+          setPartners(partnersLoadable.contents);
+        }
+      }, [partnersLoadable]);
+
+    useEffect(() => {
+        if (createLendBorrowLoadable.state === 'hasValue' && createLendBorrowLoadable.contents != undefined) {
+            console.log("inside hook:",createLendBorrowLoadable)
+            const response = createLendBorrowLoadable.contents;
             console.log("response in useeffect::",response)             
             message.success(response?.message);
             navigate('/transaction');
-        } else if (createOrUpdateLendBorrowLoadable.state === 'hasError') {
+        } else if (createLendBorrowLoadable.state === 'hasError') {
             message.error("An error occurred while processing the request.");
         }
-    }, [createOrUpdateLendBorrowLoadable, setLendBorrowPayload]);
+    }, [createLendBorrowLoadable, setLendBorrowPayload]);
 
-    const handlePartnerChange = (value: string) => {
-        setIsNewPartner(value === "Others");
+    const handleNewPartnerChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setNewPartner(event.target.value);
     };
 
 
@@ -62,7 +63,7 @@ const CreateLendBorrowModal = () => {
         console.log("partner",values.transaction_partner)
 
         const updatedLendBorrowValues: CreateLendBorrowPayloadType = {
-            transaction_partner: isNewPartner? newPartner: values.transaction_partner,
+            transaction_partner: values.transaction_partner,
             amount: amountString,
             transaction_type: values.transaction_type,
             payment_due_date: isoDateString,
@@ -71,9 +72,17 @@ const CreateLendBorrowModal = () => {
         setLendBorrowPayload(updatedLendBorrowValues)
     };
 
+    const addNewPartner = (e: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>) => {
+        e.preventDefault();
+        setPartners([...partners, newPartner]);
+        setNewPartner('');
+        setTimeout(() => {
+          inputRef.current?.focus();
+        }, 0);
+      };
+
     const handleReset = () => {
         CreateLendBorrowForm.resetFields();
-        setIsNewPartner(false);
         setNewPartner('');
     };
     return (
@@ -86,36 +95,43 @@ const CreateLendBorrowModal = () => {
                 validateTrigger="onBlur"
                 initialValues={formValues}
             >
-
                 <Form.Item
-                    label="Partner"
-                    name="transaction_partner"
-                    rules={[{ required: true, message: FORM_RULE }]}
+                 label="Partner"
+                 name="transaction_partner"
+                 rules={[{ required: true, message: FORM_RULE }]}
                 >
-                    <Select placeholder="Select Partner" allowClear showSearch onChange={handlePartnerChange}>
-                    {Array.isArray(partners) && partners.length > 0 ? (
-                        partners?.map((partner: string, index: number) => (
+                    <Select
+                     placeholder='Select Transaction Partner'
+                     showSearch
+                     dropdownRender={(menu) => (
+                        <>
+                         {menu}
+                         <Divider style={{margin:'8px 0'}}/>
+                         <Space style={{padding:'0 8px 4px'}}>  
+                            <Input
+                                placeholder='Partner Name'
+                                ref={inputRef}
+                                value={newPartner}
+                                onChange={handleNewPartnerChange}
+                                onKeyDown={(e) => e.stopPropagation()}
+                            />
+                            <Button type="text" icon={<PlusOutlined />} onClick={addNewPartner}>
+                             Add Partner
+                            </Button>
+                         </Space>
+                        
+                        </>
+                     )}
+                    >
+                        {partners.map((partner, index) => (
                             <Option key={index} value={partner}>
-                                {partner}
+                            {partner}
                             </Option>
-                        ))
-                    ) : (
-                        <Option value="" disabled>
-                            Select Partner
-                        </Option>
-                    )}
-                    <Option value="Others">New Partner</Option>
+                         ))}
+
                     </Select>
-                </Form.Item>
-                {isNewPartner && (
-                            <Form.Item
-                                label="New Partner"
-                                name="new_partner"
-                                rules={[{ required: true, message: FORM_RULE }]}
-                            >
-                                <Input placeholder='Enter partner name' value={newPartner} onChange={(e) => setNewPartner(e.target.value)} />
-                            </Form.Item>
-                        )}
+
+                </Form.Item>                
 
                 <Form.Item
                     label="Amount"
