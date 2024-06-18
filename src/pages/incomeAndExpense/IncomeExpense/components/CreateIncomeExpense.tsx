@@ -1,7 +1,7 @@
 import { DatePicker, Button, Form, Input, InputNumber, Select, Space, Row, Col, Card } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
 import { useEffect, useState } from 'react';
-import { useRecoilValueLoadable, useRecoilState, useRecoilCallback, useRecoilValue } from 'recoil';
+import { useRecoilValueLoadable, useRecoilState, useResetRecoilState, useRecoilValue } from 'recoil';
 import { useNavigate } from 'react-router-dom';
 import { getLoadableStateAndContents } from 'pages/generic/helpers/LoadableHelper';
 import GenericButton from 'pages/generic/components/Button/Button';
@@ -32,6 +32,7 @@ const CreateIncomeOrExpense = ({ transactionType }: CreateIncomeOrExpenseProps) 
     const categoriesLoadable = useRecoilValueLoadable(fetchIncomeorExpenseCategoriesSelector);
     const incomeExpenseDataLoadable = useRecoilValueLoadable(incomeExpenseDataSelector);
     const [incomeExpensePayload, setIncomeExpensePayload] = useRecoilState(CreateIncomeOrExpensePayloadAtom);
+    const resetIncomeOrExpensePayload = useResetRecoilState(CreateIncomeOrExpensePayloadAtom);
     const incomeExpenseFormValues = useRecoilValue(incomeExpenseFormState);
     const incomeOrExpenseResponseData = useRecoilValue(IncomeOrExpenseResponseAtom);
     const createOrUpdateIncomeOrExpenseLoadable = useRecoilValueLoadable(createOrUpdateIncomeOrExpense);
@@ -69,6 +70,7 @@ const CreateIncomeOrExpense = ({ transactionType }: CreateIncomeOrExpenseProps) 
             ...prevState
         }));
         navigate(`/${transactionType.toLowerCase()}`);
+        resetIncomeOrExpensePayload();
     }
 
     const handleCategoryChange = (value: string) => {

@@ -46,18 +46,21 @@ export const createOrUpdateIncomeOrExpense = selector({
                         console.log("Response data1:", response.data);
                         if (response.data.success) {
                             message.success(response?.data.message);
-                            localStorage.setItem('response',"true")
+                            localStorage.setItem('response', "true")
                         }
-                        
+
                     } else {
                         response = await apiClient(token).post<DataResponseType>('api/user/transaction', incomeOrExpensePayload);
                         console.log("Response data2:", response.data);
                         if (response.data.success) {
                             message.success(response?.data.message);
-                            localStorage.setItem('response',"true")
+                            localStorage.setItem('response', "true")
                         }
                     }
                     console.log("response.data::", response.data)
+                    if (response.data.alert) {
+                        message.warning(response.data.alert);
+                    }
                     return response.data
                 }
             }
@@ -83,28 +86,39 @@ export const getIncomeOrExpenses = selector<{
         const transactionTypeState = get(TransactionTypeAtom)
         console.log("typeeee::", transactionTypeState.transactionType)
         const filters = get(IncomeExpenseFiltersAtom);
-        const response = await api.get(`api/user/transactions/${transactionTypeState.transactionType.toLowerCase()}`, {
-            params: {
-                pageNumber: filters.page,
-                perPageCount: filters.limit || 10,
-            },
-        });
-        console.log("respdataa::", response.data)
+        if (transactionTypeState.transactionType != '') {
+            const response = await api.get(`api/user/transactions/${transactionTypeState.transactionType.toLowerCase()}`, {
+                params: {
+                    pageNumber: filters.page,
+                    perPageCount: filters.limit || 10,
+                },
+            });
+            console.log("respdataa::", response.data)
 
-        const selectedData = response.data.data.map((item: any) => ({
-            id: item.ID,
-            createdAt: item.CreatedAt,
-            category: item.Category?.name,
-            amount: item.amount,
-            currency: item.currency,
-        }));
-        return {
-            data: selectedData,
-            page: response.data.page,
-            limit: response.data.limit,
-            totalPages: response.data.totalPages,
-            totalCount: response.data.totalCount,
-        };
+            const selectedData = response.data.data.map((item: any) => ({
+                id: item.ID,
+                createdAt: item.CreatedAt,
+                category: item.Category?.name,
+                amount: item.amount,
+                currency: item.currency,
+            }));
+            return {
+                data: selectedData,
+                page: response.data.page,
+                limit: response.data.limit,
+                totalPages: response.data.totalPages,
+                totalCount: response.data.totalCount,
+            };
+        } else {
+            return {
+                data: [],
+                page: filters.page,
+                limit: filters.limit || 10,
+                totalPages: 0,
+                totalCount: 0,
+            };
+        }
+
     },
 });
 
@@ -121,7 +135,7 @@ export const fetchIncomeorExpenseCategoriesSelector = selector({
                 console.log(response)
                 return response.data.data;
             }
-            console.log("err:transaction tyepo:",transactionType)
+            console.log("err:transaction tyepo:", transactionType)
         } catch (error) {
             console.error('Error fetching categories:', error);
             throw error;
