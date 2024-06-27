@@ -4,7 +4,7 @@ export type CreateBudgetProps = {
 
 export type CreateBudgetFormType = {
     budgets: {
-        category_name?: string;
+        category_name?: string | undefined;
         amount: number | null;
         threshold: number | null;
         currency:string;
