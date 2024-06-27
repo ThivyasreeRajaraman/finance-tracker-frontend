@@ -1,13 +1,17 @@
 #budgetForm {
-    margin-left: 80px;
+    margin-left: 40px;
     margin-top:20px;
+    padding-left: 35px;
+    background: white;
+    width:1140px;
+    /* margin-right: -100px; */
 }
 
 div.ant-table-wrapper.css-dev-only-do-not-override-3rel02 {
     /* margin-left: 38px !important; */
-    margin-right: -10px;
+    /* margin-right: -10px; */
     background-color: #f6f6f6;
-    padding:35px;
+    padding:50px;
 }
 
 
@@ -23,14 +27,40 @@ div.ant-table-wrapper.css-dev-only-do-not-override-3rel02 {
     width: 36px; 
 }
 
-.ant-form-item-control-input {
+/* .ant-form-item-control-input {
     width:400px !important;
     height:38px !important;
-}
+} */
 label {
     font-size: 15px !important;
     line-height: 3;
 }
 #budgetForm .css-dev-only-do-not-override-3rel02 .ant-picker-panel {
     width: 400px !important; 
+}
+
+#budgetForm_budgets_0_amount {
+    height: 38px;
+    width:200px;
+}
+
+#budgetForm_budgets_0_threshold {
+    height: 38px;
+    width: 200px;
+}
+
+#budgetForm_budgets_0_category_name {
+    width:200px;
+}
+
+.category-column {
+    width:400px !important;
+}
+
+.amount-column {
+    width:400px !important;
+}
+
+.currency-column {
+    width: 90px;
 }

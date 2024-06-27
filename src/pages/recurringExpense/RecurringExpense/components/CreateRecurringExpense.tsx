@@ -1,6 +1,6 @@
-import { DatePicker, Button, Form, Input, message, Select, Space, Row, Col, Card,Divider,InputRef } from 'antd';
+import { DatePicker, Button, Form, Input, message, Select, Space, Row, Col, Card } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
-import { useEffect, useState,useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { createOrUpdateRecurringExpense, fetchRecurringExpenseCategoriesSelector } from '../store/RecurringExpenseSelectors';
 import { useRecoilValueLoadable, useRecoilState, useRecoilValue } from 'recoil';
 import { useNavigate } from 'react-router-dom';
@@ -8,14 +8,15 @@ import { expenseIdState, formState, CreateRecurringExpensePayloadAtom } from '..
 import { expenseDataSelector } from '../store/RecurringExpenseSelectors';
 import { getLoadableStateAndContents } from 'pages/generic/helpers/LoadableHelper';
 import GenericButton from 'pages/generic/components/Button/Button';
-import { FORM_RULE, FREQUENCY_OPTIONS } from 'pages/generic/helpers/const';
+import { FORM_RULE, FREQUENCY_OPTIONS, INPUT_AMOUNT_RULE } from 'pages/generic/helpers/const';
 import { convertExpenseDataToFormType } from '../store/helpers';
 import { CreateRecurringExpenseFormType, CreateRecurringExpensePayloadType } from '../store/RecurringExpenseTypes';
 import { useParams } from 'react-router-dom';
-import { Modal, Spin } from 'antd';
+import { Modal, Spin, InputNumber } from 'antd';
 import { DataResponseType } from 'pages/generic/apiUtils/apiTypes';
 import { fetchCurrenciesSelector } from 'pages/home/Home/store/CurrencySelectors';
-import { PlusOutlined } from '@ant-design/icons';
+import moment from 'moment';
+import dayjs from 'dayjs';
 
 const { Option } = Select;
 const { Item } = Form;
@@ -31,10 +32,8 @@ const CreateRecurringExpenseModal = () => {
     const currenciesLoadable = useRecoilValueLoadable(fetchCurrenciesSelector);
     const [CreateRecurringExpenseForm] = useForm<CreateRecurringExpenseFormType>();
     const formValues = useRecoilValue(formState);
-    const inputRef = useRef<InputRef>(null);
-
     const [showModal, setShowModal] = useState(false);
-    const [category, setCategory] = useState<string[]>([]);
+    const [isCustomCategory, setIsCustomCategory] = useState(false);
     const [customCategory, setCustomCategory] = useState('');
 
 
@@ -44,25 +43,6 @@ const CreateRecurringExpenseModal = () => {
             setExpenseIdState(expenseId);
         }
     }, [expenseId]);
-
-    useEffect(() => {
-        if (categoriesLoadable.state === 'hasValue' && categoriesLoadable.contents) {
-          setCategory(categoriesLoadable.contents);
-        }
-      }, [categoriesLoadable]);
-
-    useEffect(() => {
-        if (!categories != null) {
-            const { state, contents } = expenseDataLoadable;
-            if (contents != null) {
-                const mappedValues = convertExpenseDataToFormType(contents);
-                CreateRecurringExpenseForm.setFieldsValue(mappedValues);
-            }
-        }
-
-    }, [expenseDataLoadable, expenseId]);
-
-    console.log("categoriessss::",categories)
 
     useEffect(() => {
         if (expenseId) {
@@ -100,9 +80,8 @@ const CreateRecurringExpenseModal = () => {
         setShowModal(false);
     };
 
-
-    const handleCategoryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setCustomCategory(event.target.value);
+    const handleCategoryChange = (value: string) => {
+        setIsCustomCategory(value === "Others");
     };
 
     const handleSubmit = async (values: CreateRecurringExpenseFormType) => {
@@ -114,7 +93,7 @@ const CreateRecurringExpenseModal = () => {
         }
 
         const updatedExpenseValues: CreateRecurringExpensePayloadType = {
-            category_name: values.category_name,
+            category_name: isCustomCategory ? customCategory : values.category_name,
             amount: amountString,
             frequency: values.frequency,
             next_expense_date: isoDateString,
@@ -122,21 +101,10 @@ const CreateRecurringExpenseModal = () => {
         };
         setRecurringExpensePayload(updatedExpenseValues)
     };
-
-    const addCustomCategory = (e: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>) => {
-        e.preventDefault();
-        setCategory([...category, customCategory]);
-        setCustomCategory('');
-        setTimeout(() => {
-          inputRef.current?.focus();
-        }, 0);
-      };
     const handleReset = () => {
         CreateRecurringExpenseForm.resetFields();
-        setCustomCategory('')
     };
-
-
+    const endOfNextMonth = dayjs().add(1, 'month').endOf('month');
 
     return (
         <>
@@ -151,54 +119,51 @@ const CreateRecurringExpenseModal = () => {
                     initialValues={formValues}
 
                 >
-                    <Row justify="space-between">
+                    <Row>
                         <Col span={12}>
-                        <Form.Item
-                            label="Category"
-                            name="category_name"
-                            rules={[{ required: true, message: FORM_RULE }]}
+                            <Form.Item
+                                label="Category"
+                                name="category_name"
+                                rules={[{ required: true, message: FORM_RULE }]}
                             >
-                                <Select
-                                placeholder='Select Category'
-                                showSearch
-                                dropdownRender={(menu) => (
-                                    <>
-                                    {menu}
-                                    <Divider style={{margin:'8px 0'}}/>
-                                    <Space style={{padding:'0 8px 4px'}}>  
-                                        <Input
-                                            placeholder='Category Name'
-                                            ref={inputRef}
-                                            value={customCategory}
-                                            onChange={handleCategoryChange}
-                                            onKeyDown={(e) => e.stopPropagation()}
-                                        />
-                                        <Button type="text" icon={<PlusOutlined />} onClick={addCustomCategory}>
-                                        Add Category
-                                        </Button>
-                                    </Space>
-                                    
-                                    </>
-                                )}
-                                >
-                                    {category.map((categoryValue, index) => (
-                                        <Option key={index} value={categoryValue}>
-                                        {categoryValue}
+                                <Select placeholder="Select Category" allowClear showSearch onChange={handleCategoryChange}>
+                                    {Array.isArray(categories) && categories.length > 0 ? (
+                                        categories.map((category: string, index: number) => (
+                                            <Option key={index} value={category}>
+                                                {category}
+                                            </Option>
+                                        ))
+                                    ) : (
+                                        <Option value="" disabled>
+                                            No categories available
                                         </Option>
-                                    ))}
-
+                                    )}
+                                    <Option value="Others">Others</Option>
                                 </Select>
-
-                            </Form.Item> 
+                            </Form.Item>
+                            {isCustomCategory && (
+                                <Form.Item
+                                    label="Custom Category"
+                                    name="custom_category"
+                                    rules={[{ required: true, message: FORM_RULE }]}
+                                >
+                                    <Input placeholder='Enter custom category' value={customCategory} onChange={(e) => setCustomCategory(e.target.value)} />
+                                </Form.Item>
+                            )}
                         </Col>
 
                         <Col span={9}>
                             <Form.Item
                                 label="Amount"
                                 name="amount"
-                                rules={[{ required: true, message: FORM_RULE }]}
+                                rules={[{ required: true, message: INPUT_AMOUNT_RULE },
+                                    { type: 'number', min: 1, message: 'Amount must be greater than 0.' }
+                                ]}
+                                validateTrigger="onBlur" 
                             >
-                                <Input type="text" placeholder='Enter amount' />
+                                <InputNumber
+                                    placeholder='Enter amount'
+                                />
                             </Form.Item>
                         </Col>
                         <Col span={3}>
@@ -245,6 +210,8 @@ const CreateRecurringExpenseModal = () => {
                             >
                                 <DatePicker
                                     format="YYYY-MM-DD"
+                                    minDate={dayjs()}
+                                    maxDate={endOfNextMonth}
                                 />
                             </Form.Item>
                         </Col>
@@ -266,7 +233,6 @@ const CreateRecurringExpenseModal = () => {
                     </Row>
                 </Form>
             </Card>
-
 
             <Modal
                 title="Alert"

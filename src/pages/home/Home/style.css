@@ -43,10 +43,14 @@
 
 .chart-row {
     margin-top: 90px;
+    margin-left: 180px;
+    height: auto;
+    overflow: auto;
 }
 
-.chart-row {
-    margin-left: 180px;
+.chart-row-expense {
+    margin-top: 100px;
+    margin-left: 420px;
     height: auto;
     overflow: auto;
 }

@@ -12,7 +12,7 @@ const ProfilePage =()=>{
 
     return(
       <>
-        <Header needBackButton={false} needDivider={false} title="User Profile" buttonText="Edit Profile" onButtonClick={handleEditProfile} />
+        <Header needBackButton={false} needDivider={false} title="User Profile" />
         <Suspense fallback={<Spin size="large" />}>
                 <ProfileList />
           </Suspense>

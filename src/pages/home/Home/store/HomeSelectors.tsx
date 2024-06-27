@@ -1,5 +1,4 @@
-
-import { selector, selectorFamily } from 'recoil';
+import { selector } from 'recoil';
 import apiClient from '../../../generic/apiUtils/client';
 import { HandleErrorResponse } from 'pages/generic/apiUtils/apiErrorHandling';
 import { RecurringExpensesAtom } from 'pages/recurringExpense/RecurringExpense/store/RecurringExpenseAtoms';

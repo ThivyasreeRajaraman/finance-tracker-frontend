@@ -1,15 +1,29 @@
 #lendBorrowForm {
-    margin-left: 80px;
-    margin-top:20px;
+    display: grid;
+    grid-template-rows: auto 1fr auto !important; 
+    padding-left: 35px;
+    background: white;
+    margin-top: -10px !important;
+}
+
+#lendBorrowForm_payment_due_date {
+    width: 347px;
+}
+
+#lendBorrowForm_amount {
+    height: 38px !important;
+    width: 290px !important;
 }
 
 div.ant-table-wrapper.css-dev-only-do-not-override-3rel02 {
-    /* margin-left: 38px !important; */
-    margin-right: -10px;
     background-color: #f6f6f6;
     padding:35px;
 }
 
+ .lend-borrow-card {
+    margin-left:40px;
+    margin-right:310px !important;
+  }
 
 .ant-select-selector {
     width: 200px;
@@ -33,4 +47,18 @@ label {
 }
 #lendBorrowForm .css-dev-only-do-not-override-3rel02 .ant-picker-panel {
     width: 400px !important; 
+}
+
+.lendBorrowFilter {
+    margin-left: 45px;
+  }
+
+  .button-row-lend-borrow {
+    background-color: #f6f6f6;
+    /* padding-top: 15px; */
+    padding-left: 2px; 
+    text-align: right; 
+    padding-top:30px !important;
+    margin: 0 -40px -40px -60px; 
+    border-radius: 0 0 5px 5px;
 }
