@@ -1,0 +1,243 @@
+
+label {
+    font-size: 14px !important;
+    font-weight: normal;
+    margin-top: 8px !important;
+}
+
+#incomeOrExpenseForm {
+    display: grid;
+    grid-template-rows: auto 1fr auto !important;
+    /* margin: 40px; */
+    padding-left: 35px;
+    background: white;
+    margin-top: -10px !important;
+  }
+  
+  .ant-form-item-explain-error {
+    grid-row-start: 2 !important;
+    grid-row-end: 3 !important;
+  }
+
+td, th {
+    text-align: center !important;
+}
+td {
+    font-weight: normal;
+}
+
+#incomeOrExpenseForm {
+    /* margin: 40px; */
+    padding-left: 0px;
+    background: white;
+}
+
+.ant-table-container {
+    height: auto !important;
+    overflow: auto; 
+    /* padding:35px; */
+}
+.ant-table-wrapper {
+    padding:40px;
+    height: auto !important;
+    overflow: auto; 
+}
+
+
+.button-row {
+    background-color: #f6f6f6;
+    /* padding-top: 15px; */
+    padding-left: 15px; 
+    text-align: right; 
+    padding-top:30px !important;
+    margin: 0 -40px -40px -40px; 
+    border-radius: 0 0 5px 5px;
+}
+
+.ant-popover-inner {
+    background-color: #fff; 
+    border: 1px solid #d9d9d9; 
+    border-radius: 4px; 
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); 
+}
+
+.ant-popover-inner-content {
+    padding: 8px 16px; 
+}
+
+.ant-btn-link {
+    color: #1890ff; 
+}
+
+.ant-btn-link:hover {
+    color: #40a9ff;
+}
+
+.ant-divider {
+    margin: 8px 0;
+}
+
+
+.ant-form-item-explain-error {
+    margin-top: 8px; 
+    font-size: 14px !important;
+    font-weight: normal;
+}
+
+.ant-form-item.has-error .ant-form-item-label {
+    margin-bottom: 16px; 
+}
+
+.ant-form-item.has-error .ant-form-item-control-input {
+    margin-bottom: 24px; 
+}
+
+.ant-select,
+#incomeOrExpenseForm_amount {
+    width: 387px !important;
+    height: 38px !important;
+}
+
+#incomeOrExpenseForm_amount{
+  width: 300px !important;
+  margin-right: 40px !important;
+}
+
+#incomeOrExpenseForm_custom_category {
+  width: 400px;
+  height: 38px !important;
+}
+
+.ant-picker-panel{
+    height: 100% !important;
+    width: 100% !important;
+}
+
+.ant-picker-input {
+  height: 28px !important;
+}
+
+
+.ant-select-selection-placeholder {
+    font-size: 14px;
+    font-weight: normal;
+}
+
+.edit-button {
+    color: #1890ff;
+  }
+  
+  .delete-button {
+    color: #f5222d;
+  }
+/*   
+  .ant-card {
+    margin:55px;
+    margin-right: 500px !important;
+  } */
+
+  .button-card {
+    background-color: #f6f6f6;
+    margin-left: 150px !important;
+    margin-top: 1px !important;
+  }
+  .income-expense-form-card {
+    margin-left:40px;
+    margin-right:750px !important;
+  }
+
+  #recurringExpenseForm .ant-select:hover {
+    border-color: #34A7A3 !important;
+    cursor: pointer;
+    /* background: none !important; */
+  } 
+
+  #recurringExpenseForm .ant-form-item:hover { 
+    border-color: #34A7A3 !important;
+    cursor: pointer;
+    /* background: none !important; */
+}
+
+
+#recurringExpenseForm .ant-form-item:hover .ant-input ,
+#recurringExpenseForm .ant-form-item:hover .ant-select-selector {
+    border-color: #34A7A3 !important;
+    cursor: pointer;
+    /* background: none !important; */
+}
+
+.ant-col .ant-form-item-control .css-dev-only-do-not-override-3rel02:hover {
+    border-color: #34A7A3 !important; 
+    cursor: pointer;
+    /* background: none !important; */
+}
+
+.reset-button {
+    margin-right: 41px !important;
+    color: black !important;
+    cursor: pointer;
+    padding: 6.4px 15px;
+    font-weight: 400;
+    width: 200px;
+    height: 40px !important;
+    font-size: 15px !important;
+    border-radius: 5px;
+    color: rgba(0, 0, 0, .85);
+    border-color: #d9d9d9;
+    background: transparent;
+    /* transition: all .3s cubic-bezier(.645,.045,.355,1); */
+}
+
+.reset-button:hover {
+    border-color: #34A7A3 !important;
+    color:#34A7A3 !important;
+    cursor: pointer;
+    background: none !important;
+  }
+
+  .last-row {
+    margin-bottom:6px;
+  }
+
+  .ant-pagination-item {
+    border: 1px solid #d9d9d9 !important;
+  }
+  .ant-pagination-item a {
+    color: rgba(0, 0, 0, .85) !important;
+    font-weight: normal;
+}
+
+  .ant-pagination-item:hover {
+    border: 1px solid #34A7A3 !important;
+  }
+
+  .ant-table-cell .table-content-centered .ant-btn .css-dev-only-do-not-override-3rel02 .ant-btn-default .ant-btn-icon-only {
+    border: 1px solid #34A7A3 !important;
+  }
+
+  .total-expense-card {
+    margin-left: 40px;
+    margin-right:1000px;
+    height:120px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .total-amount {
+    font-size: 1.5em;
+    margin-top: 0.5em;
+}
+
+.total-amount.expense {
+    color: #f94949;
+}
+
+.total-amount.income {
+    color: #34cc65;
+}
+
+.currency-dropdown {
+  width:70px !important;
+}

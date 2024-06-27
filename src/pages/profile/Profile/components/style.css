@@ -1,0 +1,73 @@
+/* style.css */
+.profile-page {
+  background-color: #f0f0f0; /* Light ash background color */
+  padding: 60px;
+  display: flex;
+  
+}
+
+.profile-card {
+  width: 100%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add subtle shadow to highlight the card */
+  border-radius: 8px;
+}
+
+
+.profile-title {
+  padding: 80px; /* Reduce the space between titles */
+}
+
+.profile-item .ant-typography {
+  font-size: 0.9em; /* Increase the font size of the Text component */
+}
+
+.profile-value {
+  margin-left: 10px;
+  font-weight: normal;
+}
+
+.profile-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2px; /* Adjust this value to control the space between items */
+}
+
+.profile-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px; /* Adjust the padding as needed */
+}
+
+.profile-image .ant-avatar {
+  width: 150px;
+  height: 150px;
+}
+
+#ProfileForm {
+  margin-left: 80px;
+  margin-top:20px;
+}
+.ant-select-selector {
+  width: 200px;
+}
+
+.ant-picker-input > input {
+  width: 200px; 
+}
+
+.ant-picker-cell-inner {
+  width: 36px; 
+}
+
+.ant-form-item-control-input {
+  width:400px !important;
+  height:38px !important;
+}
+label {
+  font-size: 15px !important;
+  line-height: 3;
+}
+#ProfileForm .css-dev-only-do-not-override-3rel02 .ant-picker-panel {
+  width: 400px !important; 
+}

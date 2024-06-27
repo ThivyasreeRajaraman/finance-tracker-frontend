@@ -1,0 +1,64 @@
+.user-profile {
+  color: black;
+  float: right;
+  display: flex;
+  justify-content: flex-end; 
+  align-items: center;
+  margin-right: 26px;
+  margin-left:40px; 
+}
+
+.menu {
+  min-width: 150px;
+}
+
+.menu .ant-menu {
+  padding: 12px 0; 
+}
+
+.menu .ant-dropdown {
+  height:150px !important;
+}
+
+.menu .ant-dropdown-menu-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  font-size: 14px;
+}
+
+.menu .ant-dropdown-menu-item:hover {
+  background-color: #f0f0f0;
+}
+
+.menu .ant-dropdown-menu-item:first-child {
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.menu .ant-dropdown-menu-item:last-child {
+  color: #ff4d4f;
+}
+
+.user-profile .ant-dropdown-link {
+  display: flex; 
+  align-items: center; 
+}
+
+.user-profile .ant-avatar {
+  margin-right: 8px;
+}
+
+.user-profile .user-name {
+  margin-right: 8px;
+  color: black;
+  font-weight: 600;
+}
+
+.user-profile .ant-dropdown-trigger {
+  display: flex;
+  align-items: center;
+}
+
+.user-profile .anticon-down {
+  font-size: 10px;
+}

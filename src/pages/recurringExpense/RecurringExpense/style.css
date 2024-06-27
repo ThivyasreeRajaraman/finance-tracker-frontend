@@ -1,0 +1,20 @@
+.create-recurring-expense-modal {
+    margin-left: 600px;
+}
+
+.ant-spin-container {
+    display: block;
+    position:relative;
+}
+/* .ant-form-item {
+    align-items: flex-start !important; 
+  } */
+
+  .ant-form-item-control-input .ant-form-item-control-input-content .ant-picker {
+    align-self: flex-start !important;
+  }
+  
+  .main-content {
+    height: auto ;
+    overflow: auto; 
+  }
