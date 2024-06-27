@@ -10,9 +10,9 @@ export interface LendBorrowFilters {
 export const formState = atom<CreateLendBorrowFormType>({
   key: 'lendOrBorrowFormState',
   default: {
-    transaction_partner: '',
+    transaction_partner: undefined,
     amount: null,
-    transaction_type: '',
+    transaction_type: undefined,
     payment_due_date: null,
     currency:localStorage.getItem('currency') || '',
   }
